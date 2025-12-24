@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+:root, .light-theme {
+	--background: #6AE11E;
+	--foreground: white;
+	--serious: #E1331E;
+	--selected-bg: #951EE1;
+	--selected-fg: white;
+	--selection-bg: #1ECCE1;
+	--selection-fg: white;
+	--submenu-bg: white;
+	--submenu-fg: black;
+	--submenu-selection-bg: #1ECCE1;
+	--submenu-selection-fg: white;
+	--frame-bg: black;
+	--frame-fg: white;
+	--message-bg: var(--background);
+	--message-fg: var(--foreground);
+	--button-bg: var(--background);
+	--button-fg: var(--foreground);
+	--button-serious-bg: var(--serious);
+	--button-serious-fg: var(--foreground);
+}

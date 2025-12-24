@@ -1,0 +1,1 @@
+keytool -genkeypair -alias tomcatSSL -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore keystore.p12 -validity 365 -dname "CN=localhost, OU=Development, O=LocalTest, L=City, S=State, C=Country" -ext "SAN=dns:localhost,ip:127.0.0.1"

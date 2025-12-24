@@ -1,0 +1,11 @@
+@charset "UTF-8";
+.pathbar-class{
+	display: flex;
+    flex-direction:row;
+    align-items:center;
+	margin: 3em 0 0 0;
+	justify-content: center;
+	border-color: yellow;
+	
+
+}

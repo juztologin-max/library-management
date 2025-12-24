@@ -1,0 +1,9 @@
+@charset "UTF-8";
+.footer-container{
+	
+	display:flex;
+	flex-direction: column;
+	justify-content: centre;
+	align-content: centre;
+	
+}

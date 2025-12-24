@@ -1,0 +1,165 @@
+@charset "UTF-8";
+
+@import url("themes/light-theme.css");
+
+@import url("themes/dark-theme.css");
+
+* {
+	margin: 0;
+	padding: 0;
+	
+}
+
+.navbar {
+	overflow: hidden;
+	background-color: var(--background);
+	font-family: sans-serif;
+	font-size: 1.25em;
+	box-shadow: 0em 0em .4em .1em rgba(0, 0, 0, 0.3) inset;
+	border-radius: .2em;
+	display: flex;
+	align-items: center;
+	font-family: sans-serif;
+	font-size: 1.25em;
+	box-shadow: 0em 0em .4em .1em rgba(0, 0, 0, 0.3) inset;
+}
+
+.navbar a {
+	padding: .5em;
+}
+
+.navbar .navbarsub {
+	display: flex;
+	box-shadow: 0em 0em .4em .1em rgba(0, 0, 0, 0.3);
+	background-color: var(--serious);
+	
+}
+
+.navbar .navbarsub a {
+	color: var(--foreground);
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	transition: background-color .3s;
+}
+
+.submenuclass  .submenu {
+	list-style: none;
+	position: absolute; /*display it below Reports */
+	margin: 0;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-1.3em);
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.submenuclass:hover .submenu {
+	/*display: block;  shown on hover over Reports*/
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.submenuclass .submenu li a {
+	text-align: center;
+	background-color: var(--submenu-bg);
+	color: var(--submenu-fg);
+	transition: background-color 0.3s ease;
+	display: block;
+}
+
+.submenuclass .submenu li a:hover {
+	background-color: var(--submenu-selection-bg);
+	color: var(--submenu-selection-fg);
+}
+
+.navbarsub a.active {
+	background: var(--selected-bg);
+	color: var(--selected-fg);
+	font-weight: bold;
+	box-shadow: 0em 0em .4em .2em rgba(0, 0, 0, 0.4) inset;
+
+}
+
+.submenu li a.active {
+	background: var(--selected-bg);
+	color: var(--selected-fg);
+	font-weight: bold;
+	box-shadow: unset;
+}
+
+.submenu li a.active:hover {
+	background-color: var(--submenu-selection-bg);
+	color: var(--submenu-selection-fg);
+	/*font-weight: unset;*/
+	box-shadow: unset;
+	cursor: pointer;
+}
+
+.navbar  a.navbarright {
+	margin-left: auto;
+	background: var(--serious);
+	box-shadow: 0em 0em .4em .2em rgba(0, 0, 0, 0.5);
+	color: var(--foreground);
+	text-align: center;
+	text-decoration: none;
+}
+
+
+
+.navbar  div.seperator {
+	width: 1px;
+	background-color: var(--foreground);
+	height: .5em;
+	margin-top: .95em;
+	margin-left: .12em;
+	margin-right: .12em;
+}
+
+.navbar  div.navbarcentre {
+	margin: 0 auto;
+	background: var(--serious);
+	box-shadow: 0em 0em .4em .2em rgba(0, 0, 0, 0.5);
+	color: var(--foreground);
+	text-align: center;
+	text-decoration: none;
+	padding: .5em;
+}
+
+a.navbarright:hover, .submenuclass:hover, a.nonmenu.nonmenu:hover, a.active:hover
+	{
+	background: var(--selection-bg);
+	color: var(--selection-fg);
+	box-shadow: 0em 0em .4em .2em rgba(0, 0, 0, 0.5) inset;
+	cursor: pointer;
+	transition: box-shadow .2s;
+}
+
+.submenuclass a span.chevron {
+	display: inline-block;
+	/* required for rotation as chevron is a span(display: inline) 
+    and cannot have transformations applied on it*/
+	margin-left: .2em;
+	transition: transform 0.3s ease;
+	pointer-events: none;
+}
+
+.navbar .navbarsub .submenuclass:hover  a span.chevron {
+	transform: rotate(180deg) scale(.95);
+}
+
+.role-label {
+	background: var(--background);
+	cursor: default;
+	text-align: center;
+	text-decoration: none;
+	font-size: .7em;
+}
+
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	right: 0;
+}

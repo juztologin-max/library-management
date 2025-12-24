@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+:root, .dark-theme {
+	--background: #29570C;
+	--foreground: white;
+	--serious: #E1331E;
+	--selected-bg: #6AE11E;
+	--selected-fg: white;
+	--selection-bg: #1ECCE1;
+	--selection-fg: white;
+	--submenu-bg: white;
+	--submenu-fg: black;
+	--submenu-selection-bg: #1ECCE1;
+	--submenu-selection-fg: white;
+	--frame-bg: grey;
+	--frame-fg: white;
+	--message-bg: var(--background);
+	--message-fg: var(--foreground);
+}

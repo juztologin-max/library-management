@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - Library Demo</title>
+    <!-- Basic styling for the alerts -->
+    <style>
+        .alert { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; }
+        .alert-danger { color: #a94442; background-color: #f2dede; border-color: #ebccd1; }
+        .alert-success { color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6; }
+    </style>
+</head>
+<body>
+
+    <h2>Library Login</h2>
+
+    <!-- 1. Error Message: Appears if URL is /login?error -->
+    <div th:if="${param.error}" class="alert alert-danger">
+        Invalid username or password. Please try again.
+    </div>
+
+    <!-- 2. Logout Message: Appears if URL is /login?logout -->
+    <div th:if="${param.logout}" class="alert alert-success">
+        You have been successfully logged out.
+    </div>
+
+    <!-- 3. The Login Form -->
+    <form th:action="@{/login}" method="post">
+        <div>
+            <label>Username:</label>
+            <input type="text" name="username" required autofocus />
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password" required />
+        </div>
+
+        <!-- Remember Me Checkbox -->
+        <div>
+            <input type="checkbox" name="remember-me" id="remember-me" />
+            <label for="remember-me">Remember Me</label>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+</body>
+</html>

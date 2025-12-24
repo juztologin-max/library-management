@@ -1,0 +1,81 @@
+# Compiled class files
+*.class
+
+# Packaged files
+*.jar
+*.war
+*.ear
+.classpath
+.project
+
+# Build output directories
+target/
+build/
+.gradle/
+/out/
+dist/
+
+# IDE project files
+# Eclipse
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
+.project # Optional: some teams share this file
+.classpath # Optional: some teams share this file
+
+# IntelliJ IDEA
+.idea/
+# User-specific, generated, sensitive, or high-churn files within .idea/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/usage.statistics.xml
+.idea/shelf
+.idea/contentModel.xml
+.idea/dataSources/
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+.idea/gradle.xml
+.idea/libraries
+*.iws
+.idea_modules/
+
+# NetBeans
+nbproject/private/
+.nb-gradle/
+.nb-automatic-build-impl.xml
+nb-configuration.xml
+
+# Log and temporary files
+logs/
+*.log
+npm-debug.log*
+test-output/
+target/*.log
+
+# Environment variables and sensitive data
+.env
+*.properties # Use with caution
+
+# OS and miscellaneous files
+.DS_Store # macOS files
+Thumbs.db # Windows files
+
+*.p12
+/.mvn/
+/mvnw
+/HELP.md
+/mvnw.cmd
+
+

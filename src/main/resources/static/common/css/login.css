@@ -1,0 +1,82 @@
+@charset "UTF-8";
+
+@import url("themes/light-theme.css");
+
+@import url("themes/dark-theme.css");
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: light-grey;
+	font-family: sans-serif;
+	
+}
+.login-main-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+div.login-form-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: var(--frame-bg);
+	color: var(--frame-fg);
+	padding: 2em 7em 2em 7em;
+	border-radius: .4em;
+	box-shadow: 0em 0em .4em .1em rgba(0, 0, 0, 0.3);
+	padding: 2em 7em 2em 7em;
+	flex-wrap: nowrap;
+}
+
+div.login-form-container label.login-form-title {
+	font-family: serif;
+	font-weight: bold;
+	font-size: 2em;
+	padding: 1em;
+}
+
+div.login-form-container label.login-form-label {
+	font-family: sans-serif;
+	font-style: italic;
+	font-size: 1em;
+	padding: 1.7em 0em .5em 0em;
+}
+
+div.login-form-container input.login-form-button {
+	margin:3em 0 3em 0;
+	border: none;
+	font-weight:bold;
+	background-color: var(--frame-fg);
+	color: var(--frame-bg);
+	
+}
+
+.remember-me{
+	padding:4em 0 0 0
+}
+input[type=text],input[type=button],input[type=password],input[type=submit]{
+	width:18em;
+	height:2.3em;
+	border-radius: .3em;
+	font-size:1.1em;
+	text-align: center;
+}
+div.login-form-container input.login-form-input {
+	font-family: sans-serif;
+	border: none;
+	
+	box-shadow: 0em 0em .4em .1em rgba(0, 0, 0, 0.3) inset;
+}
+
+a{
+	color:green;
+	font-size: 1em;
+}
+span{
+	font-size:1em;
+	color:white;
+}
