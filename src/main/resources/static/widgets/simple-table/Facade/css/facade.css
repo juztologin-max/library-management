@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+/*
+body {
+	margin: 0;
+	padding: 0;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	display: flex;
+	font-family: sans-serif;
+}
+*/
+.facade-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1em 7em 1em 7em;
+	border-radius: .4em;
+	box-shadow: 0em 0em .4em .1em rgba(0, 0, 0, 0.3);
+	flex-direction: column;
+	gap: 0em;
+	margin: 1% 10% 0 10%;
+}
+
+.facade-grid-container {
+	display: grid;
+	grid-template-columns: 1fr 3.5fr;
+	gap: 1em;
+	align-items: center;
+	justify-content: center;
+}
+
+label {
+	font-size: 0.9em;
+}
+
+input[type=text], input[type=email], input[type=phoneno], textarea {
+	border: none;
+	border-radius: .3em;
+	box-shadow: 0em 0em .4em .1em rgba(0, 0, 0, 0.3) inset;
+	font-size: 1em;
+	padding: .2em .3em .2em .3em;
+}
+
+textarea, #username {
+	line-height: 1.2em;
+	font-family: serif;
+}
+
+.title {
+	font-style: normal;
+	font-weight: bold;
+	font-size: 2em;
+	font-family: serif;
+	margin: 0em 0em 1.4em 0em;
+}
+
+.facade-button {
+	margin: 2em 0em 2em 0em;
+	border-radius: .3em;
+	width: 20em;
+	height: 2em;
+	font-size: 1em;
+	font-weight: bold;
+}
+

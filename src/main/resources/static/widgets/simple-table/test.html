@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="js/simple-table.js"></script>
+<script src="Facade/facade/facade.js"></script>
+<script src="../MessageBar/js/messagebar.js"></script>
+<script type="text/javascript">
+let fhKMap = new Map([ [ "NAME", [ "legalName", "input","text" ] ],
+			[ "ADDRESS", [ "address", "textarea" ] ] ]);
+	let facade = new Facade("Simple Facade", "facade-container1", fhKMap);
+	let hKMap = new Map([ [ "NAME", "legalName" ], [ "ADDRESS", "address" ] ]);
+	let table = new SimpleTable("table-container1", "Title", hKMap,
+			"http://localhost:8080/election_trial/Admin/Owners/ListOwners.jsp");
+	table.addEventListener("TakeFromTable",facade.fillFacade.bind(facade));//bind to prevent this from referring to document instead of the object
+    facade.addEventListener("SaveFacadeValues",(event)=>{console.log(event.detail)});
+    facade.addEventListener("ModifyFacadeValues",(event)=>{console.log(event.detail)});
+</script>
+<link rel="stylesheet" href="css/simple-table.css" />
+<link rel="stylesheet" href="Facade/css/facade.css" />
+<link rel="stylesheet" href="../MessageBar/css/messagebar.css" />
+</head>
+<body>
+	<div id="message-bar-container"></div>
+	<div class="facade-container" id="facade-container1"></div>
+	<div class="simple-table-class-container" id="table-container1"></div>
+</body>
+</html>

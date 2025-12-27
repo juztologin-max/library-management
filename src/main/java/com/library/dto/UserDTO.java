@@ -9,6 +9,8 @@ package com.library.dto;
 public class UserDTO {
 	private String name;
 	private String password;
+	private boolean enabled=false;
+	private String role;
 
 	public UserDTO() {
 	}
@@ -27,6 +29,22 @@ public class UserDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.enabled = isEnabled;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

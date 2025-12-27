@@ -15,8 +15,8 @@ public class HttpRedirectConfiguration {
 	@Value("${server.port}")
 	private int httpsPort;
 
-	@Bean
-	public ServletWebServerFactory tomcatServletWebServerFactory() {
+    @Bean
+    ServletWebServerFactory tomcatServletWebServerFactory() {
 		TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
 		Connector con = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
 		con.setPort(httpPort);

@@ -1,25 +1,21 @@
 package com.library.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.library.dto.UserDTO;
-
 @Controller
-public class LoginController {
-	
+public class LoginLogoutController {
+
 	@GetMapping("/")
-	public String getRoot(Model m) {
+	public String getRoot() {
 		return "redirect:/login";
 
 	}
-	
-	
-	@GetMapping("/login")
-	public String getLogin(Model m) {
-		m.addAttribute("usr", new UserDTO());
-		return "login";
 
+	@GetMapping("/login")
+	public String getLogin() {
+		return "login";
 	}
+
+
 }

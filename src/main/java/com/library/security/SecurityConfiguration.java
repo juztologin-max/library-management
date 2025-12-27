@@ -15,6 +15,8 @@ public class SecurityConfiguration {
 
 	@Value("${remember_me.key}")
 	private String remKey;
+	@Value("${remember_me.valididty}")
+	private int validity;
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -22,10 +24,11 @@ public class SecurityConfiguration {
 		http.redirectToHttps(Customizer.withDefaults())
 		    .authorizeHttpRequests(auth -> 
 		    				    	 auth.requestMatchers( "/login","/common/**", "/widgets/**").permitAll()
-		     							.anyRequest().authenticated())
+		    				    	     .requestMatchers("/admin/**").hasAuthority("ADMIN")
+		     							 .anyRequest().authenticated())
 			.formLogin(loginForm -> 
 						   loginForm.loginPage("/login").loginProcessingUrl("/login")
-								 	.defaultSuccessUrl("/dashboard",true)
+								 	.defaultSuccessUrl("/admin/dashboard",true)
 								 	.failureHandler((req,res,ex)->	
 								 						res.sendRedirect("/login?message-type=error&message="
 								 							+ URLEncoder.encode("Incorrect username and/or password",StandardCharsets.UTF_8))))
@@ -34,8 +37,9 @@ public class SecurityConfiguration {
 						                                           + URLEncoder.encode("Successfully logged out",StandardCharsets.UTF_8))))
 			
 			.exceptionHandling(ex -> ex.accessDeniedPage("/errors/access-denied"))
-			.rememberMe(rem -> rem.key(remKey).tokenValiditySeconds(3600)
+			.rememberMe(rem -> rem.key(remKey).tokenValiditySeconds(validity)
 			.rememberMeParameter("remember-checkbox"));
+			//.csrf(csrf -> csrf.disable());
 		//@formatter:on
 		return http.build();
 
