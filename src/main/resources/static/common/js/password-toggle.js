@@ -66,7 +66,7 @@ function checkUsernameAvailability(url) {
 
 function usernameCheckCallback() {
 	const username = document.getElementsByName("username")[0];
-	const usernameFeedbackDiv = document.getElementsByName("username-feedback")[0];
+	const usernameFeedbackDiv = document.getElementById("username-feedback");
 	usernameAvailable = false;
 	if (request.readyState == 4) {
 		var resp = request.response;
@@ -99,7 +99,7 @@ function validateUsername() {
 	var text = "";
 
 	var element = document.getElementsByName("username")[0];
-	const usernameFeedbackDiv = document.getElementsByName("username-feedback")[0];
+	const usernameFeedbackDiv = document.getElementById("username-feedback");
 	let rep = /^.{4,}$/;
 	text = rep.test(element.value) ? text : "Too short";
 	console.log(text);
@@ -126,7 +126,7 @@ function validateUsername() {
 function validatePassword() {
 	let status = true;
 	var text = "";
-	const passwordFeedbackDiv = document.getElementsByName("password-feedback")[0];
+	const passwordFeedbackDiv = document.getElementById("password-feedback");
 
 	//var span = document.login_form.password_span;
 	var element = document.getElementsByName("password")[0];

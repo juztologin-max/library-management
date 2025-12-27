@@ -13,12 +13,12 @@
 	<div class="card shadow-sm">
 	<div class="card-header fw-bold" name="input-card-title">Add Admin</div>
 	<div class="card-body">
-	<div name="login-form" >
+	<div id="login-form" >
 	   <div id="alert-placeholder"></div>
 		<div class="mb-3">
 			<label for="username" class="form-label">Username</label>
 			<input type="text" class="form-control" name="username" placeholder="Enter a username" required  oninput="checkUsernameAvailability('api/manage-admin/is-name-available')">
-			<div class="invalid-feedback" name="username-feedback"></div> 
+			<div class="invalid-feedback" id="username-feedback"></div> 
 		</div>
 		<div class="mb-3">
 			<label for="password" class="form-label">Password</label>
@@ -27,7 +27,7 @@
 				<button class="btn btn-outline-secondary btn-sm" type="button" name="password-toggle" onclick="passwordToggle()">
 					<i class="bi bi-eye-slash" name="icon-toggle"></i>
 				</button>
-				<div class="invalid-feedback" name="password-feedback"></div>
+				<div class="invalid-feedback" id="password-feedback"></div>
 			</div> 
 		</div>
 		<div class="form-check form-switch mb-3">

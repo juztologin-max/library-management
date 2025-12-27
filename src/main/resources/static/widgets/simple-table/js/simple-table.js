@@ -51,6 +51,7 @@ SimpleTable.prototype.createTable = function() {
 	this.container.innerHTML = "";
 	this.container.classList.add("table-container", "mt-4");
 
+
 	this.card = document.createElement("div");
 	this.card.classList.add("card", "d-inline-block");
 
@@ -105,8 +106,14 @@ SimpleTable.prototype.createTable = function() {
 
 	this.container.appendChild(this.card);
 	this.card.appendChild(this.header);
+	
 	this.card.appendChild(this.body);
 	this.body.appendChild(responsiveContainer);
+	
+	//var alert=document.createElement("div");
+	//alert.setAttribute("id","alert-placeholder2");
+	//this.body.appendChild(alert);
+	
 	responsiveContainer.appendChild(this.table);
 
 	thead = document.createElement("thead");

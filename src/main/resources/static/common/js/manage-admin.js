@@ -51,8 +51,8 @@ function saveAdmin() {
 }
 
 
-function showAlert(type, message) {
-	const alertPlaceholder = document.getElementById('alert-placeholder')
+function showAlert(type, message, placeholder) {
+	const alertPlaceholder = document.getElementById(placeholder);
 
 	const divContainer = document.createElement('div')
 	divContainer.innerHTML = `
@@ -69,13 +69,32 @@ function saveAdminCallback() {
 		var resp = manageRequest.response;
 		simpleTable.showFirstPage();
 		if (resp != null && resp['successfull'] == true) {
-			showAlert("success", successText);
+			showAlert("success", successText, 'alert-placeholder');
 
 		} else {
-			showAlert("danger", failureText);
+			showAlert("danger", failureText, 'alert-placeholder');
 		}
 
 	}
+	username = document.getElementsByName("username")[0];
+	password = document.getElementsByName("password")[0];
+	enabled = document.getElementsByName("enabled-checkbox")[0];
+	card = document.getElementsByName("input-card-title")[0];
+	submit = document.getElementsByName("submit-button")[0];
+
+	username.classList.remove("is-valid");
+	username.classList.remove("is-invalid");
+	password.classList.remove("is-valid");
+	password.classList.remove("is-invalid");
+
+	url = "api/manage-admin/save";
+	method = "POST";
+	card.innerText = "Add Admin";
+	successText = "Inserted Admin";
+	failureText = "Could not insert Admin";
+	setInitialName("");
+	password.setAttribute("required",true);
+
 }
 
 var simpleTable;
@@ -111,10 +130,11 @@ function deleteAdminCallback() {
 		var resp = manageRequest.response;
 		simpleTable.showFirstPage();
 		if (resp != null && resp['successfull'] == true) {
-			showAlert("success", "Successfully deleted Admin");
+
+			showAlert("success", "Successfully deleted Admin", 'alert-placeholder');
 
 		} else {
-			showAlert("danger", "Could not delete Admin");
+			showAlert("danger", "Could not delete Admin", 'alert-placeholder');
 		}
 
 	}
