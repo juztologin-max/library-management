@@ -1,6 +1,5 @@
 package com.library.service;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +21,10 @@ public class LoginUserService {
 
 	public LoginUser saveLoginUser(LoginUser usr) {
 		return repo.save(usr);
+	}
+
+	public void deleteLoginUser(LoginUser usr) {
+		repo.delete(usr);
 	}
 
 	public Optional<LoginUser> findById(long id) {

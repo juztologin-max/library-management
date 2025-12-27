@@ -106,8 +106,44 @@ function editHandler(event) {
 
 }
 
+function deleteAdminCallback() {
+	if (manageRequest.readyState == 4) {
+		var resp = manageRequest.response;
+		simpleTable.showFirstPage();
+		if (resp != null && resp['successfull'] == true) {
+			showAlert("success", "Successfully deleted Admin");
+
+		} else {
+			showAlert("danger", "Could not delete Admin");
+		}
+
+	}
+}
+
 function deleteHandler(event) {
-	console.log(event.detail);
+	data = event.detail;
+	if (window.XMLHttpRequest) {
+		manageRequest = new XMLHttpRequest();
+	} else if (window.ActiveXObject) {
+		manageRequest = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	try {
+		manageRequest.onreadystatechange = deleteAdminCallback;
+
+
+		const csrfHeader = document.querySelector('meta[name="crsf_header"]').getAttribute("content");
+		const csrfValue = document.querySelector('meta[name="crsf_value"]').getAttribute("content");
+		manageRequest.open("DELETE", "api/manage-admin/" + data.id, true);
+
+
+		manageRequest.setRequestHeader(csrfHeader, csrfValue);
+
+		manageRequest.responseType = 'json';
+		manageRequest.send();
+	} catch (e) {
+		console.log(e);
+	}
+
 }
 function manageAdminInit() {
 	const csrfHeader = document.querySelector('meta[name="crsf_header"]').getAttribute("content");

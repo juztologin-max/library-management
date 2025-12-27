@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -68,9 +69,26 @@ public class ManageAdminController {
 		if (usr.getPassword() != null && !usr.getPassword().isEmpty()) {
 			loginUser.setPassword(passwordEncoder.encode(usr.getPassword()));
 		}
-		//loginUser.setRole(loginRolesService.findByName("ADMIN").get());
+		// loginUser.setRole(loginRolesService.findByName("ADMIN").get());
 		Map<String, Boolean> ret = new HashMap<>();
 		boolean status = loginUserService.saveLoginUser(loginUser) != null ? true : false;
+		ret.put("successfull", status);
+		return ret;
+
+	}
+
+	@DeleteMapping("/{id}")
+	public Map<String, Boolean> deleteAdmin(@PathVariable Long id) {
+		boolean status = true;
+		LoginUser loginUser = new LoginUser();
+		loginUser.setId(id);
+		Map<String, Boolean> ret = new HashMap<>();
+		try {
+			loginUserService.deleteLoginUser(loginUser);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			status = false;
+		}
 		ret.put("successfull", status);
 		return ret;
 
