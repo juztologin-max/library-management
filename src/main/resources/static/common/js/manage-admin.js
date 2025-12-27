@@ -9,9 +9,9 @@ var method = "POST";
 
 function saveAdmin() {
 	password = document.getElementsByName("password")[0];
-	
+
 	if (!usernameAvailable || (password.hasAttribute("required") && !validatePassword())) return;
-	
+
 
 	const passwordInput = document.getElementsByName("password")[0];
 	const usernameInput = document.getElementsByName("username")[0];
@@ -86,8 +86,15 @@ function editHandler(event) {
 	password = document.getElementsByName("password")[0];
 	enabled = document.getElementsByName("enabled-checkbox")[0];
 	card = document.getElementsByName("input-card-title")[0];
+	submit = document.getElementsByName("submit-button")[0];
 	username.value = data.name;
 	enabled.checked = data.enabled;
+	password.value = "";
+	username.classList.remove("is-valid");
+	username.classList.remove("is-invalid");
+	password.classList.remove("is-valid");
+	password.classList.remove("is-invalid");
+	submit.removeAttribute("disabled");
 	url = "api/manage-admin/" + data.id;
 	method = "PUT";
 	card.innerText = "Update Admin";
