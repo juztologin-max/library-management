@@ -13,7 +13,7 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 	this.initialSortColumn = sortColumn;
 	this.initialSortDirection = sortDirection;
 	this.sortables = new Map([[this.initialSortColumn, this.initialSortDirection]]);
-	this.sortables.set("NAME", "DSC");
+
 	this.ignoreSortColumns = ["EDIT", "DELETE"];
 	const instance = this;
 	if (document.readyState != 'loading') {
@@ -43,7 +43,9 @@ SimpleTable.prototype.dispatchEvent = function(...args) {
 
 
 
-
+SimpleTable.prototype.addSortableColumn = function(column, order) {
+	this.sortables.set(column, order);
+}
 
 SimpleTable.prototype.createTable = function() {
 
@@ -106,14 +108,14 @@ SimpleTable.prototype.createTable = function() {
 
 	this.container.appendChild(this.card);
 	this.card.appendChild(this.header);
-	
+
 	this.card.appendChild(this.body);
 	this.body.appendChild(responsiveContainer);
-	
+
 	//var alert=document.createElement("div");
 	//alert.setAttribute("id","alert-placeholder2");
 	//this.body.appendChild(alert);
-	
+
 	responsiveContainer.appendChild(this.table);
 
 	thead = document.createElement("thead");
@@ -151,10 +153,10 @@ SimpleTable.prototype.createTable = function() {
 					this.sortables.set(this.initialSortColumn, this.initialSortDirection);
 
 				}
-				
+
 				checkContainer.remove();
 				this.showFirstPage();
-				
+
 
 			});
 
