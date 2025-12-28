@@ -22,14 +22,14 @@
 					<div class="collapse navbar-collapse" id="navbarElements">
 						<ul class="navbar-nav me-auto">
 							<li class="nav-item">
-								<a class="nav-link" th:classappend="${ title == 'Dashboard' }?'active'" th:href="@{dashboard}">Dashboard</a>
+								<a class="nav-link" th:classappend="${ mainMenuItem == 'Dashboard' }?'active'" th:href="@{dashboard}">Dashboard</a>
 							</li>
 							<!--/*  settings  */-->
 							<li class="nav-item dropdown">
-								<div class="nav-link dropdown-toggle" th:classappend="${ title == 'Settings :: Manage Admin' }?'active'" data-bs-toggle="dropdown" >Settings</div>
+								<div class="nav-link dropdown-toggle" th:classappend="${ mainMenuItem == 'Settings' }?'active'" data-bs-toggle="dropdown" >Settings</div>
 									<ul class="dropdown-menu ">
 										<li>
-											<a class="dropdown-item" th:classappend="${ title == 'Settings :: Manage Admin' }?'active'" th:href="@{manage-admin}">Manage Admins</a>
+											<a class="dropdown-item" th:classappend="${ subMenuItem == 'Manage Admin'}?'active'" th:href="@{manage-admin}">Manage Admins</a>
 										</li>
 										<li>
 											<a class="dropdown-item" th:href="@{manage-roles}">Manage Roles</a>

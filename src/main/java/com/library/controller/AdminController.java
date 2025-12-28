@@ -18,6 +18,7 @@ public class AdminController {
 		userDTO.setName(usr.getUsername());
 		m.addAttribute("usr", userDTO);
 		m.addAttribute("title", "Dashboard");
+		m.addAttribute("mainMenuItem","Dashboard");
 		m.addAttribute("content", "admin/dashboard :: content");
 		return "admin/admin-layout";
 	}
@@ -28,6 +29,8 @@ public class AdminController {
 		userDTO.setName(usr.getUsername());
 		m.addAttribute("usr", userDTO);
 		m.addAttribute("title", "Settings :: Manage Admin");
+		m.addAttribute("mainMenuItem","Settings");
+		m.addAttribute("subMenuItem","Manage Admin");
 		m.addAttribute("content", "admin/manage-admin :: content");
 		return "admin/admin-layout";
 	}
