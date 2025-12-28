@@ -75,25 +75,26 @@ function saveAdminCallback() {
 			showAlert("danger", failureText, 'alert-placeholder');
 		}
 
+		username = document.getElementsByName("username")[0];
+		password = document.getElementsByName("password")[0];
+		enabled = document.getElementsByName("enabled-checkbox")[0];
+		card = document.getElementsByName("input-card-title")[0];
+		submit = document.getElementsByName("submit-button")[0];
+
+		username.classList.remove("is-valid");
+		username.classList.remove("is-invalid");
+		password.classList.remove("is-valid");
+		password.classList.remove("is-invalid");
+
+		url = "api/manage-admin/save";
+		method = "POST";
+		card.innerText = "Add Admin";
+		successText = "Inserted Admin";
+		failureText = "Could not insert Admin";
+		setInitialName("");
+		password.setAttribute("required", true);
 	}
-	username = document.getElementsByName("username")[0];
-	password = document.getElementsByName("password")[0];
-	enabled = document.getElementsByName("enabled-checkbox")[0];
-	card = document.getElementsByName("input-card-title")[0];
-	submit = document.getElementsByName("submit-button")[0];
 
-	username.classList.remove("is-valid");
-	username.classList.remove("is-invalid");
-	password.classList.remove("is-valid");
-	password.classList.remove("is-invalid");
-
-	url = "api/manage-admin/save";
-	method = "POST";
-	card.innerText = "Add Admin";
-	successText = "Inserted Admin";
-	failureText = "Could not insert Admin";
-	setInitialName("");
-	password.setAttribute("required",true);
 
 }
 
@@ -174,7 +175,7 @@ function manageAdminInit() {
 	]);
 
 	simpleTable = new SimpleTable("table-container1", "Existing Admins", hKMap, "api/manage-admin/list", csrfHeader, csrfValue, 0, 10, "ENABLED", "DSC");
-	simpleTable.addSortableColumn("NAME","ASC");
+	simpleTable.addSortableColumn("NAME", "ASC");
 	simpleTable.addEventListener("TakeFromTable", editHandler);
 	simpleTable.addEventListener("RemoveFromTable", deleteHandler);
 

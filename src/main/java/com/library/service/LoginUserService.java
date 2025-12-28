@@ -32,8 +32,14 @@ public class LoginUserService {
 	}
 
 	public Optional<LoginUser> findByName(String name) {
-		System.out.println(name);
 		return repo.findByName(name);
+	}
+
+	public Optional<LoginUser> findByNameEnabled(String name) {
+		LoginUser usr = repo.findByName(name).get();
+		if (!usr.isEnabled())
+			usr = null;
+		return Optional.ofNullable(usr);
 	}
 
 	public List<LoginUser> list() {
