@@ -1,7 +1,6 @@
 function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfValue, start, limit, sortColumn, sortDirection) {
 	this.tableContainerName = tableContainerName;
 	this.tableId = "table1";
-	this.titleId = "title1";
 	this.titleText = title;
 	this.sourceURL = sourceURL;
 	this.source = "{}";
@@ -13,6 +12,7 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 	this.initialSortColumn = sortColumn;
 	this.initialSortDirection = sortDirection;
 	this.sortables = new Map([[this.initialSortColumn, this.initialSortDirection]]);
+	this.searchEnabled = false;
 
 	this.ignoreSortColumns = ["EDIT", "DELETE"];
 	const instance = this;
@@ -46,6 +46,8 @@ SimpleTable.prototype.dispatchEvent = function(...args) {
 SimpleTable.prototype.addSortableColumn = function(column, order) {
 	this.sortables.set(column, order);
 }
+
+
 
 SimpleTable.prototype.createTable = function() {
 
@@ -89,7 +91,24 @@ SimpleTable.prototype.createTable = function() {
 
 	});
 	bContainer.appendChild(pBut);
-	this.header.appendChild(bContainer);
+
+	var searchNavContainer = document.createElement("div");
+	searchNavContainer.classList.add("d-flex", "gap-2");
+	var searchBut = document.createElement("button");
+	searchBut.classList.add("btn", "btn-sm", "btn-outline-primary", "bi", "bi-search");
+	searchBut.addEventListener("click", () => {
+		for (var hName of this.hKMap.keys()) {
+			var searchInput = document.getElementById(this.tableId + hName + "searchInput");
+			if (searchInput.classList.contains("d-none")) {
+				searchInput.classList.remove("d-none");
+			} else {
+				searchInput.classList.add("d-none");
+			}
+		}
+	});
+	searchNavContainer.appendChild(searchBut);
+	searchNavContainer.appendChild(bContainer);
+	this.header.appendChild(searchNavContainer);
 	if (this.source.length < this.limit) {
 		pBut.disabled = true;
 	} else {
@@ -112,9 +131,6 @@ SimpleTable.prototype.createTable = function() {
 	this.card.appendChild(this.body);
 	this.body.appendChild(responsiveContainer);
 
-	//var alert=document.createElement("div");
-	//alert.setAttribute("id","alert-placeholder2");
-	//this.body.appendChild(alert);
 
 	responsiveContainer.appendChild(this.table);
 
@@ -127,6 +143,15 @@ SimpleTable.prototype.createTable = function() {
 	for (let columnHeader of this.hKMap.keys()) {
 
 		header = document.createElement("th")
+
+		searchInput = document.createElement("input");
+		searchInput.setAttribute("id", this.tableId + columnHeader + "searchInput");
+		searchInput.classList.add("d-none");
+		header.appendChild(searchInput);
+		searchInput.addEventListener("input", () => {
+			console.log("i");
+		});
+		var tempTh;
 		if (this.sortables.has(columnHeader)) {
 			header.classList.add("text-bg-primary", "text-nowrap");
 			thContainer = document.createElement("div");
@@ -136,7 +161,7 @@ SimpleTable.prototype.createTable = function() {
 			thCheckBox.type = "checkbox";
 			thCheckBox.checked = true;
 			thCheckBox.name = columnHeader + "checkbox";
-			header.name = this.tableId + columnHeader;
+			header.id = this.tableId + columnHeader;
 
 
 			tempTh = document.createElement("span");
@@ -173,11 +198,14 @@ SimpleTable.prototype.createTable = function() {
 		}
 		else {
 			header.classList.remove("text-bg-primary");
-			header.textContent = columnHeader;
+			tempTh = document.createElement("div");
+			tempTh.innerText = columnHeader;
+			header.appendChild(tempTh)
+			//header.textContent = columnHeader;
 		}
 
 		headRow.appendChild(header);
-		header.addEventListener("click", () => {
+		tempTh.addEventListener("click", () => {
 			if (this.ignoreSortColumns.includes(columnHeader)) {
 				return;
 			}

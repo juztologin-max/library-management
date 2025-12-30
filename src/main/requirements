@@ -2,3 +2,12 @@ dashboard
     badges
 tags
  publishers
+
+@PrePersist & @PreUpdate (Entity Level)
+@NotBlank
+@NotNull
+@Min
+@Max
+@Valid (Controller)
+@ControllerAdvice and @ExceptionHandler
+Usage of Optional in Repository, Service and Controller layer

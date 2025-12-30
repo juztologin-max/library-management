@@ -175,7 +175,7 @@ function manageAdminInit() {
 	]);
 
 	simpleTable = new SimpleTable("table-container1", "Existing Admins", hKMap, "api/manage-admin/list", csrfHeader, csrfValue, 0, 10, "ENABLED", "DSC");
-	simpleTable.addSortableColumn("NAME", "ASC");
+	//simpleTable.addSortableColumn("NAME", "ASC");
 	simpleTable.addEventListener("TakeFromTable", editHandler);
 	simpleTable.addEventListener("RemoveFromTable", deleteHandler);
 

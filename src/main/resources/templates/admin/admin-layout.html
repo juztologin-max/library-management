@@ -39,7 +39,7 @@
 							</li>
 							<!--/*  settings end */-->
 							<li class="nav-item">
-								<a class="nav-link" th:href="@{manage-librarians}">Librarians</a>
+								<a class="nav-link" th:classappend="${ mainMenuItem == 'Manage Librarians' }?'active'" th:href="@{manage-librarians}">Librarians</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" th:href="@{manage-users}">Users</a>

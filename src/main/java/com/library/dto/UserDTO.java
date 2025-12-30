@@ -1,5 +1,7 @@
 package com.library.dto;
 
+import jakarta.validation.constraints.NotBlank; 
+
 /**
  * DTO class to shuttle user info between login page and
  * 
@@ -7,6 +9,7 @@ package com.library.dto;
  * @version 0.1
  */
 public class UserDTO {
+	@NotBlank(message = "User Name is mandatory")
 	private String name;
 	private String password;
 	private boolean enabled=false;

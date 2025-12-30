@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,9 @@ import com.library.entity.LoginUser;
 import com.library.service.LoginRolesService;
 import com.library.service.LoginUserService;
 
+import jakarta.validation.Valid;
+import tools.jackson.databind.JsonNode;
+
 @RequestMapping("/admin/api/manage-admin")
 @RestController
 public class ManageAdminController {
@@ -31,7 +36,7 @@ public class ManageAdminController {
 	PasswordEncoder passwordEncoder;
 
 	@PostMapping("/save")
-	public Map<String, Boolean> saveAdmin(@RequestBody UserDTO usr) {
+	public Map<String, Boolean> saveAdmin(@Valid @RequestBody UserDTO usr) {
 		LoginUser loginUser = new LoginUser();
 
 		loginUser.setEnabled(usr.isEnabled());
@@ -61,7 +66,7 @@ public class ManageAdminController {
 	}
 
 	@PutMapping("/{id}")
-	public Map<String, Boolean> updateAdmin(@PathVariable Long id, @RequestBody UserDTO usr) {
+	public Map<String, Boolean> updateAdmin(@Valid @PathVariable Long id, @RequestBody UserDTO usr) {
 		LoginUser loginUser = loginUserService.findById(id).get();
 		loginUser.setId(id);
 		loginUser.setEnabled(usr.isEnabled());
@@ -91,6 +96,12 @@ public class ManageAdminController {
 		}
 		ret.put("successfull", status);
 		return ret;
+
+	}
+
+	@PostMapping("/search")
+	public PagedModel<LoginUser> getListOfAdminsMatching(@RequestBody JsonNode payload) {
+		return new PagedModel<>(loginUserService.findAll(payload));
 
 	}
 
