@@ -2,43 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 
-<div th:fragment="content"  class="container mt-2" style="max-width: 18.45356%;">
-    <script src="/widgets/simple-table/js/simple-table.js" ></script>
-	<script src="/common/js/password-toggle.js" ></script>
-	<script src="/common/js/manage-admin.js" ></script>
-	
-	
-	
-	
-	<div class="card shadow-sm">
-	<div class="card-header fw-bold" name="input-card-title">Add Admin</div>
-	<div class="card-body">
-	<div id="login-form" >
-	   <div id="alert-placeholder"></div>
-		<div class="mb-3">
-			<label for="username" class="form-label">Username</label>
-			<input type="text" class="form-control" name="username" placeholder="Enter a username" required  oninput="checkUsernameAvailability('api/manage-admin/is-name-available')">
-			<div class="invalid-feedback" id="username-feedback"></div> 
+	<div th:fragment="content" class="container mt-2" style="max-width: 18.45356%;">
+		<script src="/widgets/simple-table/js/simple-table.js"></script>
+		<script src="/common/js/password-toggle.js"></script>
+		<script src="/common/js/alert.js"></script>
+		<script src="/common/js/manage-admin.js"></script>
+
+
+
+
+		<div class="card shadow-sm">
+			<div class="card-header fw-bold" name="input-card-title">Add Admin</div>
+			<div class="card-body">
+				<div id="login-form">
+					<div id="alert-placeholder"></div>
+					<div class="form-floating mb-3">
+						<input type="text" class="form-control" name="username" placeholder="Enter a username" required
+							oninput="checkUsernameAvailability('api/manage-admin/is-name-available')">
+						<label for="username">Username</label>
+						<div class="invalid-feedback" id="username-feedback"></div>
+					</div>
+					<div class="mb-3">
+						<div class="input-group has-validation">
+							<div class="form-floating" id="password-container">
+								<input type="password" class="form-control" name="password" placeholder="Enter password"
+									required oninput="validatePassword()">
+								<label for="password">Password</label>
+							</div>
+							<button class="btn btn-outline-secondary btn-sm" type="button" name="password-toggle"
+								onclick="passwordToggle()">
+								<i class="bi bi-eye-slash" name="icon-toggle"></i>
+							</button>
+							<div class="invalid-feedback" id="password-feedback"></div>
+						</div>
+					</div>
+					<div class="form-check form-switch mb-3">
+						<label class="form-check-label">Enabled</label>
+						<input type="checkbox" class="form-check-input" role="switch" name="enabled-checkbox" checked>
+					</div>
+					<button type="button" name="submit-button" class="btn btn-primary w-100"
+						onclick="saveAdmin()">Submit</button>
+				</div>
+			</div>
 		</div>
-		<div class="mb-3">
-			<label for="password" class="form-label">Password</label>
-			<div class="input-group has-validation">
-				<input type="password" class="form-control" name="password" placeholder="Enter password" required oninput="validatePassword()" >
-				<button class="btn btn-outline-secondary btn-sm" type="button" name="password-toggle" onclick="passwordToggle()">
-					<i class="bi bi-eye-slash" name="icon-toggle"></i>
-				</button>
-				<div class="invalid-feedback" id="password-feedback"></div>
-			</div> 
-		</div>
-		<div class="form-check form-switch mb-3">
-			<label class="form-check-label" >Enabled</label>
-			<input type="checkbox" class="form-check-input" role="switch" name="enabled-checkbox" checked>
-		</div>
-		<button type="button" name="submit-button" class="btn btn-primary w-100" onclick="saveAdmin()">Submit</button>
+		<div class="simple-table-class-container" id="table-container1"></div>
 	</div>
-	</div>
-</div>
-<div class="simple-table-class-container" id="table-container1"></div>
-</div>
 
 </html>

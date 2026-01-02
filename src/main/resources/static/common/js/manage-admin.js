@@ -51,18 +51,7 @@ function saveAdmin() {
 }
 
 
-function showAlert(type, message, placeholder) {
-	const alertPlaceholder = document.getElementById(placeholder);
 
-	const divContainer = document.createElement('div')
-	divContainer.innerHTML = `
-		<div class="alert alert-${type} alert-dismissible  fade show" role="alert">
-		   <div>${message}</div>
-		   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>`;
-
-	alertPlaceholder.append(divContainer)
-}
 
 function saveAdminCallback() {
 	if (manageRequest.readyState == 4) {
@@ -173,11 +162,16 @@ function manageAdminInit() {
 		['NAME', 'name'],
 		['ENABLED', 'enabled']
 	]);
+	const inputTypes = new Map([
+		['NAME', 'text'],
+		['ENABLED', 'checkbox']
+	]);
 
-	simpleTable = new SimpleTable("table-container1", "Existing Admins", hKMap, "api/manage-admin/list", csrfHeader, csrfValue, 0, 10, "ENABLED", "DSC");
+	simpleTable = new SimpleTable("table-container1", "Existing Admins", hKMap, "api/manage-admin/list", csrfHeader, csrfValue, 0, 10, "ENABLED", "DSC", inputTypes);
 	//simpleTable.addSortableColumn("NAME", "ASC");
 	simpleTable.addEventListener("TakeFromTable", editHandler);
 	simpleTable.addEventListener("RemoveFromTable", deleteHandler);
+	simpleTable.setSearchUrl("api/manage-admin/search");
 
 }
 

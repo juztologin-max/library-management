@@ -130,6 +130,7 @@ function validatePassword() {
 
 	//var span = document.login_form.password_span;
 	var element = document.getElementsByName("password")[0];
+	var container = document.getElementById("password-container");
 	//var element = document.login_form.pasword;
 
 	let rep = /^.{7,}$/;
@@ -142,12 +143,12 @@ function validatePassword() {
 
 	if (text != "") {
 		element.classList.remove("is-valid");
-		element.classList.remove("is-invalid");
 		element.classList.add("is-invalid");
+		container.classList.add("is-invalid");
 	} else {
-		element.classList.remove("is-valid");
 		element.classList.remove("is-invalid");
 		element.classList.add("is-valid");
+		container.classList.add("is-valid");
 		status = true;
 	}
 	var submit = document.getElementsByName("submit-button")[0];

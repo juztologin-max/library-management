@@ -10,22 +10,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
+
+
 import org.springframework.stereotype.Service;
 
-import com.library.dto.TableRequest;
+import com.library.component.SearchSpecification;
+
 import com.library.entity.LoginUser;
 import com.library.repository.LoginUserRepository;
-import com.library.utils.SearchSpecification;
 
 import tools.jackson.databind.JsonNode;
-import com.library.utils.SearchSpecification;
 
 @Service
 public class LoginUserService {
 	@Autowired
 	private LoginUserRepository repo;
-
+	@Autowired
+	private SearchSpecification<LoginUser> spec;
 	public LoginUser saveLoginUser(LoginUser usr) {
 		return repo.save(usr);
 	}
@@ -53,22 +54,7 @@ public class LoginUserService {
 		return repo.findAll();
 	}
 
-	public List<LoginUser> listAll(TableRequest table) {
-		List<Sort.Order> orders = new ArrayList<>();
-		for (String column : table.getSortables().keySet()) {
-			if (table.getSortables().get(column).equals("ASC")) {
-				orders.add(new Sort.Order(Sort.Direction.ASC, column));
-			} else {
-				orders.add(new Sort.Order(Sort.Direction.DESC, column));
-			}
-		}
-		Pageable pageable = PageRequest.of(table.getStart(), table.getLimit(), Sort.by(orders));
-		return repo.findBy(pageable);
-	}
-
-	public Page<LoginUser> findAll(JsonNode jsonNode) {
-
-		Pageable pageable;
+	public Page<LoginUser> listAll(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
 		int limit = jsonNode.get("pageable").get("pageSize").asInt();
@@ -81,9 +67,26 @@ public class LoginUserService {
 				orders.add(new Sort.Order(Sort.Direction.DESC, column));
 			}
 		}
-		pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
-		
-		Specification<LoginUser> spec = new SearchSpecification<>(jsonNode.get("searchable"));
-		return repo.findAll(spec,pageable);
+		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
+		return repo.findBy(pageable);
+	}
+
+	public Page<LoginUser> findAll(JsonNode jsonNode) {
+		List<Sort.Order> orders = new ArrayList<>();
+		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
+		int limit = jsonNode.get("pageable").get("pageSize").asInt();
+		JsonNode sortableNode = jsonNode.path("pageable").get("sortable");
+		for (Entry<String, JsonNode> entry : sortableNode.properties()) {
+			String column = entry.getKey();
+			if (entry.getValue().asString().equals("ASC")) {
+				orders.add(new Sort.Order(Sort.Direction.ASC, column));
+			} else {
+				orders.add(new Sort.Order(Sort.Direction.DESC, column));
+			}
+		}
+		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
+
+		spec.setJsonNode(jsonNode.get("searchable"));
+		return repo.findAll(spec, pageable);
 	}
 }

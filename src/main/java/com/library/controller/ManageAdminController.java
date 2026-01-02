@@ -1,11 +1,9 @@
 package com.library.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.library.dto.TableRequest;
 import com.library.dto.UserDTO;
 import com.library.entity.LoginUser;
 import com.library.service.LoginRolesService;
@@ -45,12 +42,13 @@ public class ManageAdminController {
 
 		loginUser.setRole(loginRolesService.findByName("ADMIN").get());
 		Map<String, Boolean> ret = new HashMap<>();
-		boolean status = loginUserService.saveLoginUser(loginUser) != null ? true : false;
+		boolean status = loginUserService.saveLoginUser(loginUser) != null ;
 		ret.put("successfull", status);
 		return ret;
 	}
 
 	@PostMapping("/is-name-available")
+	@Valid
 	public Map<String, Boolean> isAdminNameAvailable(@RequestBody UserDTO usr) {
 
 		boolean res = !loginUserService.findByName(usr.getName()).isPresent();
@@ -60,12 +58,13 @@ public class ManageAdminController {
 	}
 
 	@PostMapping("/list")
-	public List<LoginUser> getListOfAdmins(@RequestBody TableRequest req) {
-		List<LoginUser> list = loginUserService.listAll(req);
-		return list;
+	public PagedModel<LoginUser> getListOfAdmins(@RequestBody JsonNode payload) {
+		return new PagedModel<>(loginUserService.listAll(payload));
+
 	}
 
 	@PutMapping("/{id}")
+	@Valid
 	public Map<String, Boolean> updateAdmin(@Valid @PathVariable Long id, @RequestBody UserDTO usr) {
 		LoginUser loginUser = loginUserService.findById(id).get();
 		loginUser.setId(id);
@@ -76,7 +75,7 @@ public class ManageAdminController {
 		}
 		// loginUser.setRole(loginRolesService.findByName("ADMIN").get());
 		Map<String, Boolean> ret = new HashMap<>();
-		boolean status = loginUserService.saveLoginUser(loginUser) != null ? true : false;
+		boolean status = loginUserService.saveLoginUser(loginUser) != null;
 		ret.put("successfull", status);
 		return ret;
 
@@ -91,7 +90,6 @@ public class ManageAdminController {
 		try {
 			loginUserService.deleteLoginUser(loginUser);
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			status = false;
 		}
 		ret.put("successfull", status);

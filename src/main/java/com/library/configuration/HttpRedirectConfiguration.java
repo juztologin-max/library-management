@@ -1,4 +1,4 @@
-package com.library.security;
+package com.library.configuration;
 
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;

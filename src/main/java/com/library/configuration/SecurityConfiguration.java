@@ -1,4 +1,4 @@
-package com.library.security;
+package com.library.configuration;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
