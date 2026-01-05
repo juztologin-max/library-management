@@ -42,7 +42,7 @@ public class ManageAdminController {
 
 		loginUser.setRole(loginRolesService.findByName("ADMIN").get());
 		Map<String, Boolean> ret = new HashMap<>();
-		boolean status = loginUserService.saveLoginUser(loginUser) != null ;
+		boolean status = loginUserService.saveLoginUser(loginUser).getId() != null ;
 		ret.put("successfull", status);
 		return ret;
 	}

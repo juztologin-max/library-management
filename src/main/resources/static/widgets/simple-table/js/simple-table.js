@@ -17,6 +17,7 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 	this.totalPages = 0;
 	this.saveStore = new Map();
 	this.inputTypes = inputTypes;
+	this.currentColumns = Array.from(this.hKMap.keys());
 
 
 
@@ -38,31 +39,31 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 
 }
 
-SimpleTable.prototype.addEventListener = function (...args) {
+SimpleTable.prototype.addEventListener = function(...args) {
 	this.__eventTarget.addEventListener(...args);
 }
 
-SimpleTable.prototype.removeEventListener = function (...args) {
+SimpleTable.prototype.removeEventListener = function(...args) {
 	this.__eventTarget.removeEventListener(...args);
 }
 
-SimpleTable.prototype.dispatchEvent = function (...args) {
+SimpleTable.prototype.dispatchEvent = function(...args) {
 	this.__eventTarget.dispatchEvent(...args);
 }
 
 
 
-SimpleTable.prototype.addSortableColumn = function (column, order) {
+SimpleTable.prototype.addSortableColumn = function(column, order) {
 	this.sortables.set(column, order);
 }
 
-SimpleTable.prototype.setSearchUrl = function (url) {
+SimpleTable.prototype.setSearchUrl = function(url) {
 	this.searchURL = url;
 }
 
 
 
-SimpleTable.prototype._createForwardNavButton = function () {
+SimpleTable.prototype._createForwardNavButton = function() {
 	this.fbut = document.createElement("button");
 	this.fbut.classList.add("btn", "btn-sm", "btn-outline-primary", "bi", "bi-arrow-left");
 	this.fbut.addEventListener("click", async () => {
@@ -74,7 +75,7 @@ SimpleTable.prototype._createForwardNavButton = function () {
 	return this.fbut;
 }
 
-SimpleTable.prototype._createBackwardNavButton = function () {
+SimpleTable.prototype._createBackwardNavButton = function() {
 	this.pBut = document.createElement("button");
 	this.pBut.classList.add("btn", "btn-sm", "btn-outline-primary", "bi", "bi-arrow-right");
 	this.pBut.addEventListener("click", async () => {
@@ -86,7 +87,7 @@ SimpleTable.prototype._createBackwardNavButton = function () {
 }
 
 
-SimpleTable.prototype._createTextInputHeaderElement = function (columnHeader, tableId) {
+SimpleTable.prototype._createTextInputHeaderElement = function(columnHeader, tableId) {
 	var headerContainer = document.createElement("div");
 	if (this.mode === "VIEW") {
 		headerContainer.classList.add("input-group", "input-group-sm", "d-none");
@@ -174,7 +175,7 @@ SimpleTable.prototype._createTextInputHeaderElement = function (columnHeader, ta
 	return headerContainer;
 }
 
-SimpleTable.prototype._createCheckboxInputHeaderElement = function (columnHeader, tableId, saveStore) {
+SimpleTable.prototype._createCheckboxInputHeaderElement = function(columnHeader, tableId, saveStore) {
 	var headerContainer = document.createElement("div");
 	if (this.mode === "VIEW") {
 		headerContainer.classList.add("input-group", "input-group-sm", "d-none");
@@ -229,31 +230,33 @@ SimpleTable.prototype._createCheckboxInputHeaderElement = function (columnHeader
 	return headerContainer;
 }
 
-SimpleTable.prototype._createTableHead = function () {
+SimpleTable.prototype._createTableHead = function() {
 	var thead = document.createElement("thead");
 	var headRow = document.createElement("tr");
 	var header = document.createElement("th")
 	header.textContent = "#";
 	headRow.appendChild(header);
 
-	for (let columnHeader of this.hKMap.keys()) {
+	for (let columnHeader of this.currentColumns) {
 
 		header = document.createElement("th")
 		var headerContainer;
 
 		if (!this.ignoreSearchColumns.includes(columnHeader)) {
-			if (this.inputTypes.get(columnHeader) === 'text') {
-				headerContainer = this._createTextInputHeaderElement(columnHeader, this.tableId);
-			} else if (this.inputTypes.get(columnHeader) === 'checkbox') {
+			if (this.inputTypes.get(columnHeader) === 'checkbox') {
 
 				headerContainer = this._createCheckboxInputHeaderElement(columnHeader, this.tableId, this.saveStore);
+			} else {
+				//this.inputTypes.get(columnHeader) === 'text'
+				headerContainer = this._createTextInputHeaderElement(columnHeader, this.tableId);
 			}
 			header.appendChild(headerContainer);
 		}
 
 		var tempTh;
-		if (this.sortables.has(columnHeader)) {
-			header.classList.add("text-bg-primary", "text-nowrap");
+		if (this.currentColumns.includes(columnHeader) && this.sortables.has(columnHeader)) {
+			//header.classList.add("text-bg-primary", "text-nowrap");
+			header.classList.add("text-bg-primary");
 			thContainer = document.createElement("div");
 			thContainer.classList.add("d-flex", "justify-content-center", "align-items-center", "gap-2");
 			thCheckBox = document.createElement("input");
@@ -333,22 +336,27 @@ SimpleTable.prototype._createTableHead = function () {
 
 }
 
-SimpleTable.prototype._createTableBody = function () {
+SimpleTable.prototype._createTableBody = function() {
 	var tbody = document.createElement("tbody");
 
 
 	for (let i = 0; i < this.source.length; i++) {
 
-		row = this.source[i];
-		bodyRow = document.createElement("tr");
-		cell = document.createElement("td");
+		var row = this.source[i];
+		var bodyRow = document.createElement("tr");
+		var cell = document.createElement("td");
 		cell.textContent = (this.pageNo * this.limit) + i + 1;
-		cell.classList.add("text-nowrap");
+		//cell.classList.add("text-nowrap");
 		bodyRow.appendChild(cell);
 
-		for (columnHeader of this.hKMap.keys()) {
+		for (columnHeader of this.currentColumns) {
 			cell = document.createElement("td");
-			cell.textContent = row[this.hKMap.get(columnHeader)];
+			var keys = this.hKMap.get(columnHeader).split(".");
+			var temp = row[keys[0]];
+			for (innerKey of keys.slice(1)) {
+				temp = temp[innerKey];
+			}
+			cell.textContent = temp;
 
 			bodyRow.appendChild(cell);
 		}
@@ -381,11 +389,11 @@ SimpleTable.prototype._createTableBody = function () {
 	return tbody;
 }
 
-SimpleTable.prototype._createSearchBut = function () {
+SimpleTable.prototype._createSearchBut = function() {
 	var searchBut = document.createElement("button");
 	searchBut.classList.add("btn", "btn-sm", "btn-outline-primary", "bi", "bi-search");
 	searchBut.addEventListener("click", () => {
-		for (var hName of this.hKMap.keys()) {
+		for (var hName of this.currentColumns) {
 			var headerContainer = document.getElementById(this.tableId + hName + "headerContainer");
 			this.pageNo = 0;
 			if (headerContainer.classList.contains("d-none")) {
@@ -395,20 +403,88 @@ SimpleTable.prototype._createSearchBut = function () {
 				headerContainer.classList.add("d-none");
 				this.mode = "VIEW";
 			}
-			this.fetchDataAndCreateOrUpdateTable();
+
 		}
+		this.fetchDataAndCreateOrUpdateTable();
 	});
 	return searchBut;
 }
 
-SimpleTable.prototype.createTable = function () {
+SimpleTable.prototype._createColumnsShownSelector = function() {
+	var dropDownContainer = document.createElement("div");
+	dropDownContainer.classList.add("dropdown");
+	var but = document.createElement("button");
+	but.setAttribute("data-bs-auto-close", "outside");
+	but.classList.add("btn", "btn-sm", "btn-outline-primary");
+	but.type = "button";
+	but.setAttribute("data-bs-toggle", "dropdown");
+	var butIcon = document.createElement("i");
+	butIcon.classList.add("bi", "bi-list-columns");
+	but.appendChild(butIcon);
+	var ul = document.createElement("ul");
+	//ul.setAttribute("id", tableId + columnHeader + "colDropdown");
+
+	ul.classList.add("dropdown-menu");
+	for (var dropElm of this.hKMap.keys()) {
+		var li = document.createElement("li");
+		var container = document.createElement("div");
+		container.classList.add("form-check");
+		var check = document.createElement("input");
+		check.type = "checkbox";
+		check.setAttribute("id", this.tableId + "columnSelector" + dropElm);
+		check.setAttribute("column", dropElm);
+		check.classList.add("form-check-input");
+		if (this.currentColumns.includes(dropElm)) {
+			check.checked = true;
+		}
+		var label = document.createElement("label");
+		label.classList.add("form-check-label");
+		label.setAttribute("for", this.tableId + "columnSelector" + dropElm);
+		container.appendChild(check);
+		container.appendChild(label);
+		li.appendChild(container);
+		ul.appendChild(li);
+		label.textContent = dropElm;
+		check.addEventListener("change", (e) => {
+			var elm = e.target;
+			if (elm.checked) {
+				if (!this.currentColumns.includes(elm.getAttribute("column"))) {
+					this.currentColumns.push(elm.getAttribute("column"));
+					console.log("inserting: " + elm.getAttribute("column"));
+				}
+			} else {
+
+				const index = this.currentColumns.indexOf(elm.getAttribute("column"));
+				if (index > -1) {
+					this.currentColumns.splice(index, 1);
+				}
+				console.log("removing: " + elm.getAttribute("column"));
+			}
+			//this.fetchDataAndCreateOrUpdateTable();
+		});
+
+	}
+	dropDownContainer.appendChild(but);
+	dropDownContainer.appendChild(ul);
+	return dropDownContainer;
+}
+
+SimpleTable.prototype.createTable = function() {
 	this.container = document.getElementById(this.tableContainerName);
 	this.container.innerHTML = "";
-	this.container.classList.add("table-container", "mt-4");
-
+	this.container.classList.add("table-container", "row", "justify-content-center", "mt-4");
+	var inner = document.createElement("div");
+	if (this.hKMap.size <= 2) {
+		inner.classList.add("col-md-6", "col-lg-4");
+	} else if (this.hKMap.size > 2 && this.hKMap.size <= 4) {
+		inner.classList.add("col-md-10", "col-lg-6");
+	} else if (this.hKMap.size > 4) {
+		inner.classList.add("col-md-12", "col-lg-12");
+	}
+	this.container.appendChild(inner);
 
 	var card = document.createElement("div");
-	card.classList.add("card", "d-inline-block");
+	card.classList.add("card", "d-flex");
 
 
 	var cardHeader = document.createElement("div");
@@ -428,6 +504,8 @@ SimpleTable.prototype.createTable = function () {
 	searchNavContainer.classList.add("d-flex", "gap-2");
 	var searchBut = this._createSearchBut();
 	searchNavContainer.appendChild(searchBut);
+	var columnBut = this._createColumnsShownSelector();
+	searchNavContainer.appendChild(columnBut);
 	searchNavContainer.appendChild(bContainer);
 	cardHeader.appendChild(searchNavContainer);
 
@@ -451,10 +529,11 @@ SimpleTable.prototype.createTable = function () {
 
 	cardBody.appendChild(tableResponsiveContainer);
 	card.appendChild(cardBody);
-	this.container.appendChild(card);
+
+	inner.appendChild(card);
 }
 
-SimpleTable.prototype.updateTable = async function () {
+SimpleTable.prototype.updateTable = async function() {
 	await this.fetchSearchData();
 	const newTbody = this._createTableBody();
 	this.tbody.replaceWith(newTbody);
@@ -465,12 +544,12 @@ SimpleTable.prototype.updateTable = async function () {
 
 }
 
-SimpleTable.prototype.showFirstPage = function () {
+SimpleTable.prototype.showFirstPage = function() {
 	this.pageNo = 0;
 	this.fetchDataAndCreateOrUpdateTable();
 }
 
-SimpleTable.prototype.fetchDataAndCreateOrUpdateTable = async function () {
+SimpleTable.prototype.fetchDataAndCreateOrUpdateTable = async function() {
 
 	if (this.mode === "VIEW") {
 		await this.fetchData();
@@ -482,7 +561,7 @@ SimpleTable.prototype.fetchDataAndCreateOrUpdateTable = async function () {
 	}
 }
 
-SimpleTable.prototype.fetchData = async function () {
+SimpleTable.prototype.fetchData = async function() {
 
 	customHeaders = {};
 	try {
@@ -528,7 +607,7 @@ SimpleTable.prototype.fetchData = async function () {
 
 
 
-SimpleTable.prototype.fetchSearchData = async function () {
+SimpleTable.prototype.fetchSearchData = async function() {
 	customHeaders = {};
 	try {
 		if (this.csrfKey != null) {
@@ -544,7 +623,7 @@ SimpleTable.prototype.fetchSearchData = async function () {
 
 		searchables = new Map();
 		for ([key, value] of this.hKMap) {
-			if (!this.ignoreSearchColumns.includes(key)) {
+			if (!this.ignoreSearchColumns.includes(key) && this.currentColumns.includes(key)) {
 				var current = this.saveStore.get(key);
 				if (current != null && current.value != "") {
 					var columnName = this.hKMap.get(key);
@@ -586,13 +665,13 @@ SimpleTable.prototype.fetchSearchData = async function () {
 	}
 }
 
-SimpleTable.prototype.fetchSearchDataAndCreateTable = async function () {
+SimpleTable.prototype.fetchSearchDataAndCreateTable = async function() {
 	await this.fetchData();
 	this.createTable();
 
 }
 
-SimpleTable.prototype.fetchSearchDataAndUpdateTable = async function () {
+SimpleTable.prototype.fetchSearchDataAndUpdateTable = async function() {
 	await this.fetchSearchData();
 	this.createTable();
 

@@ -2,12 +2,12 @@
  * 
  */
 var manageRequest;
-var url = "api/manage-admin/save";
-var successText = "Inserted Admin";
-var failureText = "Could not insert Admin";
+var url = "api/manage-librarian/save";
+var successText = "Inserted Librarian";
+var failureText = "Could not insert Librarian";
 var method = "POST";
 
-function saveAdmin() {
+function saveLibrarian() {
 	password = document.getElementsByName("password")[0];
 
 	if (!usernameAvailable || (password.hasAttribute("required") && !validatePassword())) return;
@@ -16,6 +16,10 @@ function saveAdmin() {
 	const passwordInput = document.getElementsByName("password")[0];
 	const usernameInput = document.getElementsByName("username")[0];
 	const enabled = document.getElementsByName("enabled-checkbox")[0];
+	const legalName = document.getElementById("legalName");
+	const email = document.getElementById("email");
+	const phone = document.getElementById("phone");
+	const address = document.getElementById("address");
 	usernameAvailable = false;
 
 	if (window.XMLHttpRequest) {
@@ -32,7 +36,12 @@ function saveAdmin() {
 		payload = JSON.stringify({
 			name: usernameInput.value,
 			password: passwordInput.value,
-			enabled: enabled.checked
+			enabled: enabled.checked,
+			legalName: legalName.value,
+			email: email.value,
+			phone: phone.value,
+			address: address.value
+
 		});
 		manageRequest.open(method, url, true);
 		manageRequest.setRequestHeader("Content-Type", "application/json")
@@ -75,7 +84,7 @@ function saveAdminCallback() {
 		password.classList.remove("is-valid");
 		password.classList.remove("is-invalid");
 
-		url = "api/manage-admin/save";
+		url = "api/manage-librarian/save";
 		method = "POST";
 		card.innerText = "Add Admin";
 		successText = "Inserted Admin";
@@ -155,25 +164,7 @@ function deleteHandler(event) {
 	}
 
 }
-function manageAdminInit() {
-	const csrfHeader = document.querySelector('meta[name="crsf_header"]').getAttribute("content");
-	const csrfValue = document.querySelector('meta[name="crsf_value"]').getAttribute("content");
-	const hKMap = new Map([
-		['NAME', 'name'],
-		['ENABLED', 'enabled']
-	]);
-	const inputTypes = new Map([
-		['NAME', 'text'],
-		['ENABLED', 'checkbox']
-	]);
 
-	simpleTable = new SimpleTable("table-container1", "Existing Admins", hKMap, "api/manage-admin/list", csrfHeader, csrfValue, 0, 10, "ENABLED", "DSC", inputTypes);
-	//simpleTable.addSortableColumn("NAME", "ASC");
-	simpleTable.addEventListener("TakeFromTable", editHandler);
-	simpleTable.addEventListener("RemoveFromTable", deleteHandler);
-	simpleTable.setSearchUrl("api/manage-admin/search");
-
-}
 
 
 function setInitialName(iName) {
@@ -325,4 +316,33 @@ function validatePassword() {
 	return status
 }
 
-document.addEventListener('DOMContentLoaded', manageAdminInit);
+
+function manageLibrarianInit() {
+	const csrfHeader = document.querySelector('meta[name="crsf_header"]').getAttribute("content");
+	const csrfValue = document.querySelector('meta[name="crsf_value"]').getAttribute("content");
+	const hKMap = new Map([
+		['USERNAME', 'loginUser.name'],
+		['FULL NAME', 'legalName'],
+		['PHONE NO', 'phoneNo'],
+		//['Address', 'address'],
+		['EMAIL', 'email'],
+		['CREATOR', 'createdBy.name'],
+		['UPDATER', 'updatedBy.name'],
+		['CREATED ON', 'createdAt'],
+		['UPDATED ON', 'updatedAt'],
+		['ENABLED', 'loginUser.enabled']
+	]);
+	const inputTypes = new Map([
+		['USERNAME', 'text'],
+		['ENABLED', 'checkbox']
+	]);
+
+	simpleTable = new SimpleTable("table-container1", "Existing Librarians", hKMap, "api/manage-librarian/list", csrfHeader, csrfValue, 0, 10, "ENABLED", "DSC", inputTypes);
+	//simpleTable.addSortableColumn("NAME", "ASC");
+	simpleTable.addEventListener("TakeFromTable", editHandler);
+	simpleTable.addEventListener("RemoveFromTable", deleteHandler);
+	simpleTable.setSearchUrl("api/manage-admin/search");
+
+}
+
+document.addEventListener('DOMContentLoaded', manageLibrarianInit);

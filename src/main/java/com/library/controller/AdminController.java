@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 public class AdminController {
 
     @GetMapping("/dashboard")
+    @Valid
     public String getAdminDashboard(Model m, @AuthenticationPrincipal UserDetails usr) {
         UserDTO userDTO = new UserDTO();
         userDTO.setName(usr.getUsername());
@@ -27,6 +28,7 @@ public class AdminController {
     }
 
     @GetMapping("/manage-admin")
+    @Valid
     public String getManageAdmin(Model m, @AuthenticationPrincipal UserDetails usr) {
         UserDTO userDTO = new UserDTO();
         userDTO.setName(usr.getUsername());
@@ -38,15 +40,15 @@ public class AdminController {
         return "admin/admin-layout";
     }
 
-    @GetMapping("/manage-librarians")
+    @GetMapping("/manage-librarian")
     @Valid
     public String getManageLibrarians(Model m, @AuthenticationPrincipal UserDetails usr) {
         UserDTO userDTO = new UserDTO();
         userDTO.setName(usr.getUsername());
         m.addAttribute("usr", userDTO);
-        m.addAttribute("title", "Manage Librarians");
+        m.addAttribute("title", "Manage Librarian");
         m.addAttribute("mainMenuItem", "Manage Librarians");
-        m.addAttribute("content", "admin/manage-librarians :: content");
+        m.addAttribute("content", "admin/manage-librarian :: content");
         return "admin/admin-layout";
     }
 }

@@ -41,16 +41,14 @@
 									<a class="dropdown-item" th:classappend="${ subMenuItem == 'Manage Admin'}?'active'"
 										th:href="@{manage-admin}">Manage Admins</a>
 								</li>
-								<li>
-									<a class="dropdown-item" th:href="@{manage-roles}">Manage Roles</a>
-								</li>
+
 
 							</ul>
 						</li>
 						<!--/*  settings end */-->
 						<li class="nav-item">
-							<a class="nav-link" th:classappend="${ mainMenuItem == 'Manage Librarians' }?'active'"
-								th:href="@{manage-librarians}">Librarians</a>
+							<a class="nav-link" th:classappend="${ mainMenuItem == 'Manage Librarian' }?'active'"
+								th:href="@{manage-librarian}">Librarians</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" th:href="@{manage-users}">Users</a>
