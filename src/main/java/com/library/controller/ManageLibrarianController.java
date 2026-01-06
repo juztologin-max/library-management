@@ -1,6 +1,7 @@
 package com.library.controller;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +55,7 @@ public class ManageLibrarianController {
 			libr.setAddress(jsonNode.get("address").asString());
 			libr.setEmail(jsonNode.get("email").asString());
 			libr.setPhoneNo(jsonNode.get("phone").asString());
-			libr.setUpdatedAt(LocalDateTime.now());
+			libr.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 			libr.setCreatedBy(((LoginUserDetails) usr).getUser());
 			libr.setUpdatedBy(((LoginUserDetails) usr).getUser());
 			libr = librarianService.saveLibrarian(libr);
@@ -68,6 +69,12 @@ public class ManageLibrarianController {
 	@PostMapping("/list")
 	public PagedModel<Librarian> getListOfLibrarians(@RequestBody JsonNode payload) {
 		return new PagedModel<>(librarianService.listAll(payload));
+
+	}
+	
+	@PostMapping("/search")
+	public PagedModel<Librarian> getListOfAdminsMatching(@RequestBody JsonNode payload) {
+		return new PagedModel<>(librarianService.findAll(payload));
 
 	}
 

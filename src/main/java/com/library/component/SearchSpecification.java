@@ -2,8 +2,10 @@ package com.library.component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class SearchSpecification<T> implements Specification<T> {
 		List<Predicate> predicateList = new ArrayList<>();
 		for (Map.Entry<String, JsonNode> entry : this.jsonNode.properties()) {
 			String key = entry.getKey();
-
+			// System.out.println(key);
 			Path<Object> column;
 			if (key.contains(".")) {
 				String[] parts = key.split("\\.");
@@ -78,16 +80,19 @@ public class SearchSpecification<T> implements Specification<T> {
 				predicateList.add(criteriaBuilder.notEqual(column, conversionService.convert(term, type)));
 			}
 			case "Between" -> {
-				String firstTerm = innerEntry.getValue().properties().iterator().next().getValue().asString();
-				String secondTerm = innerEntry.getValue().properties().iterator().next().getValue().asString();
-				predicateList.add(criteriaBuilder.between(column.as(String.class), firstTerm, secondTerm));
+				Class<?> type = column.getJavaType();
+				Iterator<Entry<String, JsonNode>> iter=innerEntry.getValue().properties().iterator();
+				Object firstTerm = iter.next().getValue().asString();
+				Object secondTerm = iter.next().getValue().asString();
+				System.out.println(firstTerm+" "+secondTerm);
+				predicateList.add(criteriaBuilder.between(column.as((Class<? extends Comparable>) type),(Comparable) conversionService.convert(firstTerm,type),(Comparable) conversionService.convert(secondTerm,type)));
 			}
 			default -> {
 				throw new IllegalArgumentException("Unsupported operation: " + innerEntry.getKey());
 			}
 			}
 		}
-		boolean res = predicateList.isEmpty();
+		
 		return !predicateList.isEmpty() ? criteriaBuilder.and(predicateList.toArray(new Predicate[0])) : null;
 	}
 

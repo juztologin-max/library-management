@@ -324,25 +324,26 @@ function manageLibrarianInit() {
 		['USERNAME', 'loginUser.name'],
 		['FULL NAME', 'legalName'],
 		['PHONE NO', 'phoneNo'],
-		//['Address', 'address'],
+		['Address', 'address'],
 		['EMAIL', 'email'],
+		['ENABLED', 'loginUser.enabled'],
 		['CREATOR', 'createdBy.name'],
 		['UPDATER', 'updatedBy.name'],
 		['CREATED ON', 'createdAt'],
-		['UPDATED ON', 'updatedAt'],
-		['ENABLED', 'loginUser.enabled']
+		['UPDATED ON', 'updatedAt']
+
 	]);
 	const inputTypes = new Map([
-		['USERNAME', 'text'],
-		['ENABLED', 'checkbox']
+		['ENABLED', 'checkbox'],
+		['UPDATED ON', 'datetime']
 	]);
 
-	simpleTable = new SimpleTable("table-container1", "Existing Librarians", hKMap, "api/manage-librarian/list", csrfHeader, csrfValue, 0, 10, "ENABLED", "DSC", inputTypes);
+	simpleTable = new SimpleTable("table-container1", "Existing Librarians", hKMap, "api/manage-librarian/list", csrfHeader, csrfValue, 0, 10, "FULL NAME", "DSC", inputTypes);
 	//simpleTable.addSortableColumn("NAME", "ASC");
 	simpleTable.addEventListener("TakeFromTable", editHandler);
 	simpleTable.addEventListener("RemoveFromTable", deleteHandler);
-	simpleTable.setSearchUrl("api/manage-admin/search");
-
+	simpleTable.setSearchUrl("api/manage-librarian/search");
+	simpleTable.setCurrentColumns(["USERNAME", "FULL NAME", "UPDATED ON", "UPDATER"]);
 }
 
 document.addEventListener('DOMContentLoaded', manageLibrarianInit);

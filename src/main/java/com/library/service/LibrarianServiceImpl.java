@@ -16,7 +16,7 @@ import com.library.entity.Librarian;
 import com.library.repository.LibrarianRepository;
 
 import tools.jackson.databind.JsonNode;
-import com.library.entity.Librarian;
+
 @Service
 public class LibrarianServiceImpl implements LibrarianService {
 	@Autowired
@@ -47,6 +47,7 @@ public class LibrarianServiceImpl implements LibrarianService {
 			orders.add(new Sort.Order(direction, column));
 			
 		}
+		
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 		return repo.findAll(pageable);
 	}
@@ -59,6 +60,8 @@ public class LibrarianServiceImpl implements LibrarianService {
 		for (Entry<String, JsonNode> entry : sortableNode.properties()) {
 			String column = entry.getKey();
 			Sort.Direction direction=entry.getValue().asString().equalsIgnoreCase("ASC")?Sort.Direction.ASC:Sort.Direction.DESC;
+		
+			
 			orders.add(new Sort.Order(direction, column));
 			
 		}
