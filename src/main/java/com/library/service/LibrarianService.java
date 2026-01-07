@@ -1,5 +1,7 @@
 package com.library.service;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 
 import com.library.entity.Librarian;
@@ -8,6 +10,8 @@ import tools.jackson.databind.JsonNode;
 
 public interface LibrarianService {
 	public Librarian saveLibrarian(Librarian libr) ;
+	
+	public Optional<Librarian> findById(Long libr) ;
 
 	public void deleteLibrarian(Librarian libr) ;
 

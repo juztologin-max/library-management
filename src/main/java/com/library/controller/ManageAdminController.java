@@ -42,7 +42,13 @@ public class ManageAdminController {
 
 		loginUser.setRole(loginRolesService.findByName("ADMIN").get());
 		Map<String, Boolean> ret = new HashMap<>();
-		boolean status = loginUserService.saveLoginUser(loginUser).getId() != null ;
+		boolean status = false;
+		try {
+			status = loginUserService.saveLoginUser(loginUser).getId() != null;
+		} catch (Exception ex) {
+			ret.put("successfull", false);
+		}
+
 		ret.put("successfull", status);
 		return ret;
 	}
@@ -75,7 +81,12 @@ public class ManageAdminController {
 		}
 		// loginUser.setRole(loginRolesService.findByName("ADMIN").get());
 		Map<String, Boolean> ret = new HashMap<>();
-		boolean status = loginUserService.saveLoginUser(loginUser) != null;
+		boolean status = false;
+		try {
+			status = loginUserService.saveLoginUser(loginUser) != null;
+		} catch (Exception ex) {
+			ret.put("successfull", false);
+		}
 		ret.put("successfull", status);
 		return ret;
 

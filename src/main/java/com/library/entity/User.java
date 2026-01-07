@@ -24,11 +24,11 @@ import jakarta.persistence.Table;
  * @version 0.1
  */
 @Entity
-@Table(name = "librarians")
-public final class Librarian {
+@Table(name = "users")
+public final class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "librarian_id")
+	@Column(name = "user_id")
 	private Long id;
 
 	@Column(nullable = false, length = 30)
@@ -73,7 +73,7 @@ public final class Librarian {
 		
 	}
 
-	public Librarian() {
+	public User() {
 	}
 
 	public Long getId() {

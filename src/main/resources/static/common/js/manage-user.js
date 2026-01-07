@@ -2,9 +2,9 @@
  * 
  */
 var manageRequest;
-var url = "api/manage-librarian/save";
-var successText = "Inserted Librarian";
-var failureText = "Could not insert Librarian";
+var url = "api/manage-user/save";
+var successText = "Inserted User";
+var failureText = "Could not insert User";
 var method = "POST";
 
 function saveLibrarian() {
@@ -92,7 +92,7 @@ function deleteHandler(event) {
 
 		const csrfHeader = document.querySelector('meta[name="crsf_header"]').getAttribute("content");
 		const csrfValue = document.querySelector('meta[name="crsf_value"]').getAttribute("content");
-		manageRequest.open("DELETE", "api/manage-librarian/" + data.id, true);
+		manageRequest.open("DELETE", "api/manage-user/" + data.id, true);
 
 
 		manageRequest.setRequestHeader(csrfHeader, csrfValue);
@@ -109,7 +109,7 @@ function deleteHandler(event) {
 function saveAdminCallback() {
 	if (manageRequest.readyState == 4) {
 		var resp = manageRequest.response;
-		simpleTable.showFirstPage();
+		simpleTable.resetAndShowFirstPage();
 		if (resp != null && resp['successfull'] == true) {
 			showAlert("success", successText, 'alert-placeholder');
 
@@ -128,11 +128,11 @@ function saveAdminCallback() {
 		password.classList.remove("is-valid");
 		password.classList.remove("is-invalid");
 
-		url = "api/manage-librarian/save";
+		url = "api/manage-user/save";
 		method = "POST";
-		card.innerText = "Add Admin";
-		successText = "Inserted Admin";
-		failureText = "Could not insert Admin";
+		card.innerText = "Add User";
+		successText = "Inserted User";
+		failureText = "Could not insert User";
 		setInitialName("");
 		password.setAttribute("required", true);
 	}
@@ -167,11 +167,11 @@ function editHandler(event) {
 	password.classList.remove("is-valid");
 	password.classList.remove("is-invalid");
 	submit.removeAttribute("disabled");
-	url = "api/manage-librarian/" + data.id;
+	url = "api/manage-user/" + data.id;
 	method = "PUT";
-	card.innerText = "Update Librarian";
-	successText = "Successfully updated Librarian";
-	failureText = "Could not update Librarian";
+	card.innerText = "Update User";
+	successText = "Successfully updated User";
+	failureText = "Could not update User";
 	setInitialName(username.value);
 	password.removeAttribute("required");
 	validateUsername();
@@ -345,7 +345,7 @@ function validatePassword() {
 }
 
 
-function manageLibrarianInit() {
+function manageUserInit() {
 	const csrfHeader = document.querySelector('meta[name="crsf_header"]').getAttribute("content");
 	const csrfValue = document.querySelector('meta[name="crsf_value"]').getAttribute("content");
 	const hKMap = new Map([
@@ -366,12 +366,12 @@ function manageLibrarianInit() {
 		['UPDATED ON', 'datetime']
 	]);
 
-	simpleTable = new SimpleTable("table-container1", "Existing Librarians", hKMap, "api/manage-librarian/list", csrfHeader, csrfValue, 0, 10, "FULL NAME", "DSC", inputTypes);
+	simpleTable = new SimpleTable("table-container1", "Existing Librarians", hKMap, "api/manage-user/list", csrfHeader, csrfValue, 0, 10, "FULL NAME", "DSC", inputTypes);
 	//simpleTable.addSortableColumn("NAME", "ASC");
 	simpleTable.addEventListener("TakeFromTable", editHandler);
 	simpleTable.addEventListener("RemoveFromTable", deleteHandler);
-	simpleTable.setSearchUrl("api/manage-librarian/search");
+	simpleTable.setSearchUrl("api/manage-user/search");
 	simpleTable.setCurrentColumns(["USERNAME", "FULL NAME", "UPDATED ON", "UPDATER"]);
 }
 
-document.addEventListener('DOMContentLoaded', manageLibrarianInit);
+document.addEventListener('DOMContentLoaded', manageUserInit);

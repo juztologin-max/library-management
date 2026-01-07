@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+	<div th:fragment="content" class="container mt-2">
+		<script src="/widgets/simple-table/js/simple-table.js"></script>
+		<script src="/common/js/password-toggle.js"></script>
+		<script src="/common/js/alert.js"></script>
+		<script src="/common/js/manage-librarian.js"></script>
+
+
+		<div class="row justify-content-center">
+			<div class="col-md-6 col-lg-4">
+				<div class="card shadow-sm">
+					<div class="card-header fw-bold" name="input-card-title">Add Librarian</div>
+					<div class="card-body">
+						<div id="login-form">
+							<div id="alert-placeholder"></div>
+							<div class="container">
+								<div class="row">
+									<div class="col">
+										<div class="form-floating mb-3">
+											<input type="text" class="form-control" name="username"
+												placeholder="Enter a username" required
+												oninput="checkUsernameAvailability('api/manage-admin/is-name-available')">
+											<label for="username">Username</label>
+											<div class="invalid-feedback" id="username-feedback"></div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="mb-3">
+											<div class="input-group has-validation">
+												<div class="form-floating" id="password-container">
+													<input type="password" class="form-control" name="password"
+														placeholder="Enter password" required
+														oninput="validatePassword()">
+													<label for="password">Password</label>
+												</div>
+												<button class="btn btn-outline-secondary btn-sm" type="button"
+													name="password-toggle" onclick="passwordToggle()">
+													<i class="bi bi-eye-slash" name="icon-toggle"></i>
+												</button>
+												<div class="invalid-feedback" id="password-feedback"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<div class="form-floating mb-3">
+											<input type="text" class="form-control" id="legalName"
+												placeholder="Enter a username" required
+												oninput="checkUsernameAvailability('api/manage-admin/is-name-available')">
+											<label for="username">Legal Name</label>
+											<div class="invalid-feedback" id="legalName-feedback"></div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<div class="form-floating mb-3">
+											<input type="text" class="form-control" id="email"
+												placeholder="Enter a username" required>
+											<label for="username">Email</label>
+											<div class="invalid-feedback" id="email-feedback"></div>
+										</div>
+									</div>
+									<div class="col">
+										<div class="mb-3">
+											<div class="input-group  has-validation">
+												<div class="form-floating" id="phone-container">
+													<input type="text" class="form-control" id="phone"
+														placeholder="Enter password" required>
+													<label for="password">Phone No</label>
+												</div>
+												<div class="invalid-feedback" id="phone-feedback"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="form-floating mb-3">
+										<textarea class="form-control" id="address" placeholder="Enter a username"
+											rows="4" cols="50" required></textarea>
+										<label for="username">Address</label>
+										<div class="invalid-feedback" id="address-feedback"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="form-check form-switch mb-3">
+										<label class="form-check-label">Enabled</label>
+										<input type="checkbox" class="form-check-input" role="switch"
+											name="enabled-checkbox" checked>
+									</div>
+								</div>
+							</div>
+							<button type="button" name="submit-button" class="btn btn-primary w-100"
+								onclick="saveLibrarian()">Submit</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="simple-table-class-container" id="table-container1"></div>
+	</div>
+
+</html>

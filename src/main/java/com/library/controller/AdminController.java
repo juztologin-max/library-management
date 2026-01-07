@@ -46,9 +46,21 @@ public class AdminController {
         UserDTO userDTO = new UserDTO();
         userDTO.setName(usr.getUsername());
         m.addAttribute("usr", userDTO);
-        m.addAttribute("title", "Manage Librarian");
+        m.addAttribute("title", "Manage Librarians");
         m.addAttribute("mainMenuItem", "Manage Librarians");
         m.addAttribute("content", "admin/manage-librarian :: content");
+        return "admin/admin-layout";
+    }
+    
+    @GetMapping("/manage-user")
+    @Valid
+    public String getManageUsers(Model m, @AuthenticationPrincipal UserDetails usr) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName(usr.getUsername());
+        m.addAttribute("usr", userDTO);
+        m.addAttribute("title", "Manage Users");
+        m.addAttribute("mainMenuItem", "Manage Users");
+        m.addAttribute("content", "admin/manage-user :: content");
         return "admin/admin-layout";
     }
 }

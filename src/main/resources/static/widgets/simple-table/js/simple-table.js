@@ -232,10 +232,10 @@ SimpleTable.prototype._createDateTimeInputHeaderElement = function(columnHeader,
 	}
 
 	input.addEventListener("change", (e) => {
-		equalLi = document.getElementById(tableId + columnHeader + "liEqual");
-		betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
-		NoneLi = document.getElementById(tableId + columnHeader + "liNone");
-		but = document.getElementById(tableId + columnHeader + "button");
+		var equalLi = document.getElementById(tableId + columnHeader + "liEqual");
+		var betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
+		var NoneLi = document.getElementById(tableId + columnHeader + "liNone");
+		var but = document.getElementById(tableId + columnHeader + "button");
 		equalLi.classList.add("active");
 		betweenLi.classList.remove("active");
 		NoneLi.classList.remove("active");
@@ -283,31 +283,37 @@ SimpleTable.prototype._createDateTimeInputHeaderElement = function(columnHeader,
 	}
 
 	input.addEventListener("change", (e) => {
-		equalLi = document.getElementById(tableId + columnHeader + "liEqual");
-		betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
-		NoneLi = document.getElementById(tableId + columnHeader + "liNone");
-		but = document.getElementById(tableId + columnHeader + "button");
+		var equalLi = document.getElementById(tableId + columnHeader + "liEqual");
+		var betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
+		var NoneLi = document.getElementById(tableId + columnHeader + "liNone");
+		var but = document.getElementById(tableId + columnHeader + "button");
 		equalLi.classList.remove("active");
 		betweenLi.classList.add("active");
 		NoneLi.classList.remove("active");
 		but.innerText = "Between";
+		console.log("####################");
 		var save = this.saveStore.get(columnHeader);
-		if (save == null) {
-			save = {};
-			save.type = "Between";
-			save.start = "";
-			save.end = ""
+		var currentEndValue = "";
+		if (save != null) {
+			currentEndValue = save.end;
 		}
+		save = {
+			type: "Between",
+			start: e.target.value,
+			end: currentEndValue
+		};
 
-		save.start = e.target.value;
+		console.log(save);
 
 		var likeInput = document.getElementById(tableId + columnHeader + "EqualInput");
 		likeInput.value = "";
 		this.saveStore.set(columnHeader, save);
 		if (save.end != "") {
 			console.log("start");
+			console.log(save);
 			this.updateTable();
 		}
+		console.log("#########END###########");
 	});
 
 	container.appendChild(header);
@@ -321,22 +327,26 @@ SimpleTable.prototype._createDateTimeInputHeaderElement = function(columnHeader,
 	}
 
 	input.addEventListener("change", (e) => {
-		equalLi = document.getElementById(tableId + columnHeader + "liEqual");
-		betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
-		NoneLi = document.getElementById(tableId + columnHeader + "liNone");
-		but = document.getElementById(tableId + columnHeader + "button");
+		var equalLi = document.getElementById(tableId + columnHeader + "liEqual");
+		var betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
+		var NoneLi = document.getElementById(tableId + columnHeader + "liNone");
+		var but = document.getElementById(tableId + columnHeader + "button");
 		equalLi.classList.remove("active");
 		betweenLi.classList.add("active");
 		NoneLi.classList.remove("active");
 		but.innerText = "Between";
 		var save = this.saveStore.get(columnHeader);
-		if (save == null) {
-			save = {};
-			save.type = "Between";
-			save.start = "";
-			save.end = ""
+		var currentStartValue = "";
+		if (save != null) {
+			currentStartValue = save.start;
 		}
-		save.end = e.target.value;
+		save = {
+			type: "Between",
+			start: currentStartValue,
+			end: e.target.value
+		};
+
+
 
 		var likeInput = document.getElementById(tableId + columnHeader + "EqualInput");
 		likeInput.value = "";
@@ -750,6 +760,13 @@ SimpleTable.prototype.updateTable = async function() {
 SimpleTable.prototype.showFirstPage = function() {
 	this.pageNo = 0;
 	this.fetchDataAndCreateOrUpdateTable();
+}
+
+SimpleTable.prototype.resetAndShowFirstPage = async function() {
+	this.pageNo = 0;
+	this.saveStore=new Map();
+	await this.fetchData();
+	this.createTable();
 }
 
 SimpleTable.prototype.fetchDataAndCreateOrUpdateTable = async function() {
