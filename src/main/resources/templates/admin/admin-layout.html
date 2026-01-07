@@ -52,11 +52,15 @@
 					</li>
 					<!--/*  settings end */-->
 					<li class="nav-item"><a class="nav-link"
-						th:classappend="${ mainMenuItem == 'Manage Librarian' }?'active'"
+						th:classappend="${ mainMenuItem == 'Manage Librarians' }?'active'"
 						th:href="@{manage-librarian}">Librarians</a></li>
 					<li class="nav-item"><a class="nav-link"
-						th:classappend="${ mainMenuItem == 'Manage User' }?'active'"
+						th:classappend="${ mainMenuItem == 'Manage Users' }?'active'"
 						th:href="@{manage-user}">Users</a></li>
+
+					<li class="nav-item"><a class="nav-link"
+						th:classappend="${ mainMenuItem == 'Manage Books' }?'active'"
+						th:href="@{manage-book}">Books</a></li>
 				</ul>
 				<!--/*  username,logout  */-->
 				<!--/* ms-auto - right end */-->

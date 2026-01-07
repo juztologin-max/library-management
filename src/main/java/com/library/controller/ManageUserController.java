@@ -61,7 +61,9 @@ public class ManageUserController {
 			user.setEmail(jsonNode.get("email").asString());
 			user.setPhoneNo(jsonNode.get("phone").asString());
 			user.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-			user.setCreatedBy(((LoginUserDetails) usr).getUser());
+			if (user.getId() == null) {
+				user.setCreatedBy(((LoginUserDetails) usr).getUser());
+			}
 			user.setUpdatedBy(((LoginUserDetails) usr).getUser());
 			try {
 				user = userService.saveUser(user);

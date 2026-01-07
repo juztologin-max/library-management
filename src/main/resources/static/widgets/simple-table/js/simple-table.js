@@ -222,7 +222,7 @@ SimpleTable.prototype._createDateTimeInputHeaderElement = function(columnHeader,
 	header.classList.add("small");
 	header.innerText = "Equal";
 	var input = document.createElement("input");
-	input.type = "datetime-local";
+	input.type = "date";
 	input.classList.add("form-control");
 	input.setAttribute("step", 1);
 	input.setAttribute("id", tableId + columnHeader + "EqualInput");
@@ -270,7 +270,7 @@ SimpleTable.prototype._createDateTimeInputHeaderElement = function(columnHeader,
 	header.classList.add("small");
 	header.innerText = "Between";
 	var input = document.createElement("input");
-	input.type = "datetime-local";
+	input.type = "datetime";
 	input.classList.add("form-control");
 	input.setAttribute("id", tableId + columnHeader + "BetweenStartInput");
 	if (saved != null && saved.type == "Between") {
@@ -319,7 +319,199 @@ SimpleTable.prototype._createDateTimeInputHeaderElement = function(columnHeader,
 	container.appendChild(header);
 	container.appendChild(input);
 	input = document.createElement("input");
-	input.type = "datetime-local";
+	input.type = "datetime";
+	input.classList.add("form-control");
+	input.setAttribute("id", tableId + columnHeader + "BetweenEndInput");
+	if (saved != null && saved.type == "Between") {
+		input.value = saved.end;
+	}
+
+	input.addEventListener("change", (e) => {
+		var equalLi = document.getElementById(tableId + columnHeader + "liEqual");
+		var betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
+		var NoneLi = document.getElementById(tableId + columnHeader + "liNone");
+		var but = document.getElementById(tableId + columnHeader + "button");
+		equalLi.classList.remove("active");
+		betweenLi.classList.add("active");
+		NoneLi.classList.remove("active");
+		but.innerText = "Between";
+		var save = this.saveStore.get(columnHeader);
+		var currentStartValue = "";
+		if (save != null) {
+			currentStartValue = save.start;
+		}
+		save = {
+			type: "Between",
+			start: currentStartValue,
+			end: e.target.value
+		};
+
+
+
+		var likeInput = document.getElementById(tableId + columnHeader + "EqualInput");
+		likeInput.value = "";
+		this.saveStore.set(columnHeader, save);
+		if (save.start != "") {
+			console.log("end");
+			this.updateTable();
+		}
+	});
+	container.appendChild(input);
+	ul.appendChild(li);
+
+
+	var li = document.createElement("li");
+	var container = document.createElement("hr");
+	container.classList.add("dropdown-divide");
+	li.appendChild(container);
+	ul.appendChild(li);
+
+	var li = document.createElement("li");
+	li.setAttribute("id", tableId + columnHeader + "liNone");
+	li.classList.add("dropdown-item", "active");
+	li.innerText = "None";
+	ul.appendChild(li);
+
+	dropDownContainer.appendChild(but);
+	dropDownContainer.appendChild(ul);
+	headerContainer.appendChild(dropDownContainer);
+
+	return headerContainer;
+}
+
+SimpleTable.prototype._createDateInputHeaderElement = function(columnHeader, tableId) {
+	var headerContainer = document.createElement("div");
+	if (this.mode === "VIEW") {
+		headerContainer.classList.add("input-group", "input-group-sm", "d-none");
+	} else {
+		headerContainer.classList.add("input-group", "input-group-sm");
+	}
+	headerContainer.setAttribute("id", tableId + columnHeader + "headerContainer")
+	var dropDownContainer = document.createElement("div");
+	dropDownContainer.classList.add("dropdown");
+	var but = document.createElement("button");
+	but.classList.add("btn", "btn-sm", "btn-primary");
+	but.type = "button";
+	but.setAttribute("id", tableId + columnHeader + "button");
+	but.setAttribute("data-bs-toggle", "dropdown");
+	but.setAttribute("data-bs-popper-config", '{"strategy":"fixed"}');
+	var butIcon = document.createElement("i");
+	butIcon.classList.add("bi", "bi-wrench-adjustable-circle");
+	but.appendChild(butIcon);
+	but.innerText = "None";
+	var ul = document.createElement("ul");
+	ul.setAttribute("id", tableId + columnHeader + "searchDropdown");
+	ul.classList.add("dropdown-menu");
+
+	var saved = this.saveStore.get(columnHeader);
+
+	var li = document.createElement("li");
+	li.setAttribute("id", tableId + columnHeader + "liEqual");
+	var container = document.createElement("div");
+	li.classList.add("dropdown-item");
+	li.appendChild(container);
+	var header = document.createElement("h6");
+	header.classList.add("small");
+	header.innerText = "Equal";
+	var input = document.createElement("input");
+	input.type = "date";
+	input.classList.add("form-control");
+	input.setAttribute("step", 1);
+	input.setAttribute("id", tableId + columnHeader + "EqualInput");
+
+	if (saved != null && saved.type == "Equal") {
+		input.value = saved.value;
+	}
+
+	input.addEventListener("change", (e) => {
+		var equalLi = document.getElementById(tableId + columnHeader + "liEqual");
+		var betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
+		var NoneLi = document.getElementById(tableId + columnHeader + "liNone");
+		var but = document.getElementById(tableId + columnHeader + "button");
+		equalLi.classList.add("active");
+		betweenLi.classList.remove("active");
+		NoneLi.classList.remove("active");
+		but.innerText = "Equal";
+		var save = {
+			type: "Equal",
+			value: e.target.value
+		};
+		var betweenStartInput = document.getElementById(tableId + columnHeader + "BetweenStartInput");
+		var betweenEndInput = document.getElementById(tableId + columnHeader + "BetweenEndInput");
+		betweenStartInput.value = "";
+		betweenEndInput.value = "";
+		this.saveStore.set(columnHeader, save);
+		this.updateTable();
+	});
+	container.appendChild(header);
+	container.appendChild(input);
+	ul.appendChild(li);
+
+	var li = document.createElement("li");
+	var container = document.createElement("hr");
+	container.classList.add("dropdown-divide");
+	li.appendChild(container);
+	ul.appendChild(li);
+
+	var li = document.createElement("li");
+	li.setAttribute("id", tableId + columnHeader + "liBetween");
+	var container = document.createElement("div");
+	li.classList.add("dropdown-item");
+	li.appendChild(container);
+	var header = document.createElement("h6");
+	header.classList.add("small");
+	header.innerText = "Between";
+	var input = document.createElement("input");
+	input.type = "date";
+	input.classList.add("form-control");
+	input.setAttribute("id", tableId + columnHeader + "BetweenStartInput");
+	if (saved != null && saved.type == "Between") {
+		input.value = saved.start;
+	} else {
+		saved = {};
+		saved.type = "Between";
+		saved.start = "";
+		saved.end = ""
+	}
+
+	input.addEventListener("change", (e) => {
+		var equalLi = document.getElementById(tableId + columnHeader + "liEqual");
+		var betweenLi = document.getElementById(tableId + columnHeader + "liBetween");
+		var NoneLi = document.getElementById(tableId + columnHeader + "liNone");
+		var but = document.getElementById(tableId + columnHeader + "button");
+		equalLi.classList.remove("active");
+		betweenLi.classList.add("active");
+		NoneLi.classList.remove("active");
+		but.innerText = "Between";
+		console.log("####################");
+		var save = this.saveStore.get(columnHeader);
+		var currentEndValue = "";
+		if (save != null) {
+			currentEndValue = save.end;
+		}
+		save = {
+			type: "Between",
+			start: e.target.value,
+			end: currentEndValue
+		};
+
+		console.log(save);
+
+		var likeInput = document.getElementById(tableId + columnHeader + "EqualInput");
+		likeInput.value = "";
+		this.saveStore.set(columnHeader, save);
+		if (save.end != "") {
+			console.log("start");
+			console.log(save);
+			this.updateTable();
+		}
+		console.log("#########END###########");
+	});
+
+	container.appendChild(header);
+	container.appendChild(input);
+	input = document.createElement("input");
+	input.type = "date";
 	input.classList.add("form-control");
 	input.setAttribute("id", tableId + columnHeader + "BetweenEndInput");
 	if (saved != null && saved.type == "Between") {
@@ -452,6 +644,8 @@ SimpleTable.prototype._createTableHead = function() {
 				headerContainer = this._createCheckboxInputHeaderElement(columnHeader, this.tableId, this.saveStore);
 			} else if (this.inputTypes.get(columnHeader) === 'datetime') {
 				headerContainer = this._createDateTimeInputHeaderElement(columnHeader, this.tableId, this.saveStore);
+			} else if (this.inputTypes.get(columnHeader) === 'date') {
+				headerContainer = this._createDateInputHeaderElement(columnHeader, this.tableId, this.saveStore);
 			}
 			else {
 				//this.inputTypes.get(columnHeader) === 'text'
@@ -764,7 +958,7 @@ SimpleTable.prototype.showFirstPage = function() {
 
 SimpleTable.prototype.resetAndShowFirstPage = async function() {
 	this.pageNo = 0;
-	this.saveStore=new Map();
+	this.saveStore = new Map();
 	await this.fetchData();
 	this.createTable();
 }
@@ -853,7 +1047,7 @@ SimpleTable.prototype.fetchSearchData = async function() {
 						if (!current.value.indeterminate) {
 							searchables.set(columnName, { [current.option]: { "var": current.value.value } });
 						}
-					} else if (this.inputTypes.get(key) === 'datetime') {
+					} else if (this.inputTypes.get(key) === 'datetime' || this.inputTypes.get(key) === 'date') {
 						if (current.type == "Equal") {
 							searchables.set(columnName, { "Equal": { "var": current.value } });
 						} else if (current.type == "Between") {

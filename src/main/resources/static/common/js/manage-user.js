@@ -6,6 +6,7 @@ var url = "api/manage-user/save";
 var successText = "Inserted User";
 var failureText = "Could not insert User";
 var method = "POST";
+var simpleTable;
 
 function saveLibrarian() {
 	password = document.getElementsByName("password")[0];
@@ -140,7 +141,7 @@ function saveAdminCallback() {
 
 }
 
-var simpleTable;
+
 
 function editHandler(event) {
 	const data = event.detail;

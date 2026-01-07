@@ -63,4 +63,16 @@ public class AdminController {
         m.addAttribute("content", "admin/manage-user :: content");
         return "admin/admin-layout";
     }
+    
+    @GetMapping("/manage-book")
+    @Valid
+    public String getManageBook(Model m, @AuthenticationPrincipal UserDetails usr) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName(usr.getUsername());
+        m.addAttribute("usr", userDTO);
+        m.addAttribute("title", "Manage Books");
+        m.addAttribute("mainMenuItem", "Manage Books");
+        m.addAttribute("content", "admin/manage-book :: content");
+        return "admin/admin-layout";
+    }
 }

@@ -61,7 +61,9 @@ public class ManageLibrarianController {
 			libr.setEmail(jsonNode.get("email").asString());
 			libr.setPhoneNo(jsonNode.get("phone").asString());
 			libr.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-			libr.setCreatedBy(((LoginUserDetails) usr).getUser());
+			if (libr.getId() == null) {
+				libr.setCreatedBy(((LoginUserDetails) usr).getUser());
+			}
 			libr.setUpdatedBy(((LoginUserDetails) usr).getUser());
 			try {
 				libr = librarianService.saveLibrarian(libr);
@@ -107,7 +109,7 @@ public class ManageLibrarianController {
 			librarian.setAddress(jsonNode.get("address").asString());
 			librarian.setEmail(jsonNode.get("email").asString());
 			librarian.setPhoneNo(jsonNode.get("phone").asString());
-			librarian.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			//librarian.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
 			librarian.setUpdatedBy(((LoginUserDetails) usr).getUser());
 			try {
