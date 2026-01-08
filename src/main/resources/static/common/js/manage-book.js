@@ -121,7 +121,7 @@ function saveBookCallback() {
 	if (manageRequest.readyState == 4) {
 		var resp = manageRequest.response;
 		var card = document.getElementById("input-card-title");
-		//simpleTable.showFirstPage();
+		simpleTable.showFirstPage();
 		if (resp != null && resp['successfull'] == true) {
 			showAlert("success", successText, 'alert-placeholder');
 
@@ -149,13 +149,14 @@ function deleteLibrarianCallback() {
 		simpleTable.showFirstPage();
 		if (resp != null && resp['successfull'] == true) {
 
-			showAlert("success", "Successfully deleted Admin", 'alert-placeholder');
+			showAlert("success", "Successfully deleted Book", 'alert-placeholder');
 
 		} else {
-			showAlert("danger", "Could not delete Admin", 'alert-placeholder');
+			showAlert("danger", "Could not delete book", 'alert-placeholder');
 		}
 
 	}
+	
 }
 
 function deleteHandler(event) {
@@ -171,7 +172,7 @@ function deleteHandler(event) {
 
 		const csrfHeader = document.querySelector('meta[name="crsf_header"]').getAttribute("content");
 		const csrfValue = document.querySelector('meta[name="crsf_value"]').getAttribute("content");
-		manageRequest.open("DELETE", "api/manage-user/" + data.id, true);
+		manageRequest.open("DELETE", "api/manage-book/" + data.id, true);
 
 
 		manageRequest.setRequestHeader(csrfHeader, csrfValue);
@@ -199,11 +200,11 @@ function editHandler(event) {
 	name.value = data.name;
 	author.value = data.author;
 	publisher.value = data.publisher;
-	publishedDate.value = data.publishedDate;
+	publishedDate.value = data.publishedAt;
 	total.value = data.total;
 	description.value = data.description;
-	coverPageData = Uint8Array.fromBase64(data.content);
-	coverpage.src = URL.createObjectURL(new Blob([coverPageData], { type: 'application/octet-stream' }));
+	coverPageData = data.content;
+	coverpage.src = URL.createObjectURL(new Blob([Uint8Array.fromBase64(data.content)], { type: 'application/octet-stream' }));
 	const preImage = document.getElementById("preImage");
 	const coverpageContainer = document.getElementById("coverpage-container");
 	preImage.classList.add('d-none');

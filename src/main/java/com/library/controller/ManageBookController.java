@@ -54,7 +54,7 @@ public class ManageBookController {
 		}
 		book.setUpdatedBy(((LoginUserDetails) usr).getUser());
 		try {
-			book = bookService.saveLibrarian(book);
+			book = bookService.saveBook(book);
 		} catch (Exception ex) {
 			ret.put("successfull", false);
 		}
@@ -83,15 +83,16 @@ public class ManageBookController {
 		ret.put("successfull", false);
 		if (book != null) {
 			book.setName(jsonNode.get("name").asString());
+			System.out.println(book.getName());
 			book.setAuthor(jsonNode.get("author").asString());
 			book.setPublisher(jsonNode.get("publisher").asString());
 			book.setPublishedAt(jsonNode.get("publishedDate").asString());
 			book.setTotal(jsonNode.get("total").asLong());
 			book.setDescription(jsonNode.get("description").asString());
-			book.setContent(Base64.getDecoder().decode(jsonNode.get("content").asString().split(",")[1]));
+			book.setContent(Base64.getDecoder().decode(jsonNode.get("content").asString()));
 			book.setUpdatedBy(((LoginUserDetails) usr).getUser());
 			try {
-				book = bookService.saveLibrarian(book);
+				book = bookService.saveBook(book);
 			} catch (Exception ex) {
 				ret.put("successfull", false);
 			}
@@ -103,13 +104,13 @@ public class ManageBookController {
 	}
 
 	@DeleteMapping("/{id}")
-	public Map<String, Boolean> deleteLibrarian(@PathVariable Long id) {
+	public Map<String, Boolean> deleteLibrarian(@Valid @PathVariable Long id) {
 		boolean status = true;
 		Book book = new Book();
 		book.setId(id);
 		Map<String, Boolean> ret = new HashMap<>();
 		try {
-			bookService.deleteLibrarian(book);
+			bookService.deleteBook(book);
 		} catch (Exception ex) {
 			status = false;
 		}

@@ -25,11 +25,11 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private SearchSpecification<Book> spec;
 	
-	public Book saveLibrarian(Book book) {
+	public Book saveBook(Book book) {
 		return repo.save(book);
 	}
 
-	public void deleteLibrarian(Book book) {
+	public void deleteBook(Book book) {
 		repo.delete(book);
 	}
 

@@ -10,11 +10,11 @@ import com.library.entity.Librarian;
 import tools.jackson.databind.JsonNode;
 
 public interface BookService {
-	public Book saveLibrarian(Book book) ;
+	public Book saveBook(Book book) ;
 	
 	public Optional<Book> findById(Long id) ;
 
-	public void deleteLibrarian(Book book) ;
+	public void deleteBook(Book book) ;
 
 
 	public Page<Book> listAll(JsonNode jsonNode) ;
