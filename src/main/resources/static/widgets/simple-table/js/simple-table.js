@@ -1,4 +1,4 @@
-function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfValue, start, limit, sortColumn, sortDirection, inputTypes) {
+function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfValue, start, limit, sortColumn, sortDirection, inputTypes, rowClick) {
 	this.tableContainerName = tableContainerName;
 	this.tableId = "table1";
 	this.titleText = title;
@@ -41,12 +41,39 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 	}
 	this.__eventTarget = new EventTarget();
 
-
+	this.previousSelected = 1;
+	this.showEdit = true;
+	this.showDelete = true;
+	this.rowClick = rowClick;
 
 }
 
 SimpleTable.prototype.setCurrentColumns = function(columns) {
 	this.currentColumns = columns;
+}
+
+SimpleTable.prototype.getRowCount = function() {
+	return this.source.length;
+}
+
+
+
+SimpleTable.prototype.setShowEdit = function(show) {
+	this.showEdit = show;
+}
+
+SimpleTable.prototype.setShowDelete = function(show) {
+	this.showDelete = show;
+}
+
+SimpleTable.prototype.selectRow = function(index) {
+	const table = document.getElementById(this.tableId);
+	var row = table.rows[this.previousSelected];
+	row.classList.remove("table-primary");
+	row = table.rows[index];
+	row.classList.add("table-primary");
+	this.previousSelected = index;
+	this.dispatchEvent(new CustomEvent("TakeFromTable", { detail: this.source[index - 1] }));
 }
 
 SimpleTable.prototype.addEventListener = function(...args) {
@@ -726,12 +753,16 @@ SimpleTable.prototype._createTableHead = function() {
 			this.showFirstPage();
 		});
 	}
-	header = document.createElement("th")
-	header.textContent = "EDIT";
-	headRow.appendChild(header);
-	header = document.createElement("th")
-	header.textContent = "DELETE";
-	headRow.appendChild(header);
+	if (this.showEdit) {
+		header = document.createElement("th")
+		header.textContent = "EDIT";
+		headRow.appendChild(header);
+	}
+	if (this.showDelete) {
+		header = document.createElement("th")
+		header.textContent = "DELETE";
+		headRow.appendChild(header);
+	}
 	thead.appendChild(headRow);
 	return thead;
 
@@ -745,6 +776,11 @@ SimpleTable.prototype._createTableBody = function() {
 
 		var row = this.source[i];
 		var bodyRow = document.createElement("tr");
+		if (this.rowClick) {
+			bodyRow.addEventListener("click", () => {
+				this.selectRow(i + 1);
+			});
+		}
 		var cell = document.createElement("td");
 		cell.textContent = (this.pageNo * this.limit) + i + 1;
 		//cell.classList.add("text-nowrap");
@@ -767,29 +803,33 @@ SimpleTable.prototype._createTableBody = function() {
 
 			bodyRow.appendChild(cell);
 		}
+		if (this.showEdit) {
+			var button = document.createElement("button");
+			button.classList.add("btn", "btn-sm", "btn-primary");
+			button.textContent = "Edit";
 
-		var button = document.createElement("button");
-		button.classList.add("btn", "btn-sm", "btn-primary");
-		button.textContent = "Edit";
+			button.addEventListener("click", () => {
+				this.dispatchEvent(new CustomEvent("TakeFromTable", { detail: this.source[i] }));
 
-		button.addEventListener("click", () => {
-			this.dispatchEvent(new CustomEvent("TakeFromTable", { detail: this.source[i] }));
+			});
+			cell = document.createElement("td");
+			cell.appendChild(button);
+			bodyRow.appendChild(cell);
+		}
+		console.log(this.showDelete);
+		if (this.showDelete) {
+			button = document.createElement("button");
+			button.classList.add("btn", "btn-sm", "btn-danger");
+			button.textContent = "Delete";
+			button.addEventListener("click", () => {
+				this.dispatchEvent(new CustomEvent("RemoveFromTable", { detail: this.source[i] }));
 
-		});
-		cell = document.createElement("td");
-		cell.appendChild(button);
-		bodyRow.appendChild(cell);
-		button = document.createElement("button");
-		button.classList.add("btn", "btn-sm", "btn-danger");
-		button.textContent = "Delete";
-		button.addEventListener("click", () => {
-			this.dispatchEvent(new CustomEvent("RemoveFromTable", { detail: this.source[i] }));
+			});
 
-		});
-
-		cell = document.createElement("td");
-		cell.appendChild(button);
-		bodyRow.appendChild(cell);
+			cell = document.createElement("td");
+			cell.appendChild(button);
+			bodyRow.appendChild(cell);
+		}
 		tbody.appendChild(bodyRow);
 
 	}
@@ -877,6 +917,7 @@ SimpleTable.prototype._createColumnsShownSelector = function() {
 }
 
 SimpleTable.prototype.createTable = function() {
+	this.previousSelected = 1;
 	this.container = document.getElementById(this.tableContainerName);
 	this.container.innerHTML = "";
 	this.container.classList.add("table-container", "row", "justify-content-center", "mt-4");
@@ -938,6 +979,7 @@ SimpleTable.prototype.createTable = function() {
 	card.appendChild(cardBody);
 
 	inner.appendChild(card);
+	this.dispatchEvent(new CustomEvent("NewTable"));
 }
 
 SimpleTable.prototype.updateTable = async function() {

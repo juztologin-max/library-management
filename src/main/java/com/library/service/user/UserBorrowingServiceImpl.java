@@ -1,9 +1,8 @@
-package com.library.service.admin;
+package com.library.service.user;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,30 +12,21 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.library.component.SearchSpecification;
-import com.library.entity.User;
-import com.library.repository.admin.AdminUserRepository;
+import com.library.entity.Book;
+import com.library.repository.user.UserBookRepository;
 
 import tools.jackson.databind.JsonNode;
 
 @Service
-public class AdminUserServiceImpl implements AdminUserService {
+public class UserBorrowingServiceImpl implements UserBorrowingService {
 	@Autowired
-	private AdminUserRepository repo;
+	private UserBookRepository bookRepo;
 	@Autowired
-	private SearchSpecification<User> spec;
+	private SearchSpecification<Book> spec;
 	
-	public User saveUser(User usr) {
-		return repo.save(usr);
-	}
-
-	public void deleteUser(User usr) {
-		repo.delete(usr);
-	}
-
-
 	
 
-	public Page<User> listAll(JsonNode jsonNode) {
+	public Page<Book> listAllBooks(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
 		int limit = jsonNode.get("pageable").get("pageSize").asInt();
@@ -50,10 +40,10 @@ public class AdminUserServiceImpl implements AdminUserService {
 		}
 		
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
-		return repo.findAll(pageable);
+		return bookRepo.findAll(pageable);
 	}
 
-	public Page<User> findAll(JsonNode jsonNode) {
+	public Page<Book> findAll(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
 		int limit = jsonNode.get("pageable").get("pageSize").asInt();
@@ -69,12 +59,10 @@ public class AdminUserServiceImpl implements AdminUserService {
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 
 		spec.setJsonNode(jsonNode.get("searchable"));
-		return repo.findAll(spec, pageable);
+		return bookRepo.findAll(spec, pageable);
 		
 	}
 	
-	public Optional<User> findById(Long id) {
-		return repo.findById(id);
-	}
+
 	
 }
