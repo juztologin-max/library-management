@@ -1,4 +1,4 @@
-package com.library.controller;
+package com.library.controller.admin;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -18,31 +18,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.library.dto.UserDTO;
 import com.library.entity.Librarian;
 import com.library.entity.LoginUser;
 import com.library.entity.LoginUserDetails;
-import com.library.entity.User;
 import com.library.service.LoginRolesService;
 import com.library.service.LoginUserService;
-import com.library.service.UserService;
+import com.library.service.admin.AdminLibrarianService;
 
 import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
 
-@RequestMapping("/admin/api/manage-user")
+@RequestMapping("/admin/api/manage-librarian")
 @RestController
-public class ManageUserController {
+public class AdminManageLibrarianController {
 	@Autowired
 	private LoginUserService loginUserService;
 	@Autowired
-	private UserService userService;
+	private AdminLibrarianService librarianService;
 	@Autowired
 	private LoginRolesService loginRolesService;
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	@PostMapping("/save")
-	public Map<String, Boolean> saveUser(@RequestBody JsonNode jsonNode, @AuthenticationPrincipal UserDetails usr) {
+	public Map<String, Boolean> saveAdmin(@RequestBody JsonNode jsonNode, @AuthenticationPrincipal UserDetails usr) {
 		LoginUser loginUser = new LoginUser();
 
 		loginUser.setEnabled(jsonNode.get("enabled").asBoolean());
@@ -54,23 +54,23 @@ public class ManageUserController {
 
 		loginUser = loginUserService.saveLoginUser(loginUser);
 		if (loginUser.getId() != null) {
-			User user = new User();
-			user.setLegalName(jsonNode.get("legalName").asString());
-			user.setLoginUser(loginUser);
-			user.setAddress(jsonNode.get("address").asString());
-			user.setEmail(jsonNode.get("email").asString());
-			user.setPhoneNo(jsonNode.get("phone").asString());
-			user.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-			if (user.getId() == null) {
-				user.setCreatedBy(((LoginUserDetails) usr).getUser());
+			Librarian libr = new Librarian();
+			libr.setLegalName(jsonNode.get("legalName").asString());
+			libr.setLoginUser(loginUser);
+			libr.setAddress(jsonNode.get("address").asString());
+			libr.setEmail(jsonNode.get("email").asString());
+			libr.setPhoneNo(jsonNode.get("phone").asString());
+			libr.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			if (libr.getId() == null) {
+				libr.setCreatedBy(((LoginUserDetails) usr).getUser());
 			}
-			user.setUpdatedBy(((LoginUserDetails) usr).getUser());
+			libr.setUpdatedBy(((LoginUserDetails) usr).getUser());
 			try {
-				user = userService.saveUser(user);
+				libr = librarianService.saveLibrarian(libr);
 			} catch (Exception ex) {
 				ret.put("successfull", false);
 			}
-			ret.put("successfull", user.getId() != null);
+			ret.put("successfull", libr.getId() != null);
 		} else {
 			loginUserService.deleteLoginUser(loginUser);
 		}
@@ -78,59 +78,59 @@ public class ManageUserController {
 	}
 
 	@PostMapping("/list")
-	public PagedModel<User> getListOfUsers(@RequestBody JsonNode payload) {
-		return new PagedModel<>(userService.listAll(payload));
+	public PagedModel<Librarian> getListOfLibrarians(@RequestBody JsonNode payload) {
+		return new PagedModel<>(librarianService.listAll(payload));
 
 	}
 
 	@PostMapping("/search")
-	public PagedModel<User> getListOfUsersMatching(@RequestBody JsonNode payload) {
-		return new PagedModel<>(userService.findAll(payload));
+	public PagedModel<Librarian> getListOfAdminsMatching(@RequestBody JsonNode payload) {
+		return new PagedModel<>(librarianService.findAll(payload));
 
 	}
 
 	@PutMapping("/{id}")
 	@Valid
-	public Map<String, Boolean> updateUser(@Valid @PathVariable Long id, @RequestBody JsonNode jsonNode,
+	public Map<String, Boolean> updateLibrarian(@Valid @PathVariable Long id, @RequestBody JsonNode jsonNode,
 			@AuthenticationPrincipal UserDetails usr) {
-		User user = userService.findById(id).get();
+		Librarian librarian = librarianService.findById(id).get();
 		Map<String, Boolean> ret = new HashMap<>();
 		ret.put("successfull", false);
-		if (user != null) {
-			user.getLoginUser().setEnabled(jsonNode.get("enabled").asBoolean());
-			user.getLoginUser().setName(jsonNode.get("name").asString());
+		if (librarian != null) {
+			librarian.getLoginUser().setEnabled(jsonNode.get("enabled").asBoolean());
+			librarian.getLoginUser().setName(jsonNode.get("name").asString());
 			if (!jsonNode.get("password").asString().isBlank()) {
-				user.getLoginUser().setPassword(passwordEncoder.encode(jsonNode.get("password").asString()));
+				librarian.getLoginUser().setPassword(passwordEncoder.encode(jsonNode.get("password").asString()));
 			}
 
-			LoginUser loginUser = loginUserService.saveLoginUser(user.getLoginUser());
-			user.setLegalName(jsonNode.get("legalName").asString());
-			user.setLoginUser(loginUser);
-			user.setAddress(jsonNode.get("address").asString());
-			user.setEmail(jsonNode.get("email").asString());
-			user.setPhoneNo(jsonNode.get("phone").asString());
-			user.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			LoginUser loginUser = loginUserService.saveLoginUser(librarian.getLoginUser());
+			librarian.setLegalName(jsonNode.get("legalName").asString());
+			librarian.setLoginUser(loginUser);
+			librarian.setAddress(jsonNode.get("address").asString());
+			librarian.setEmail(jsonNode.get("email").asString());
+			librarian.setPhoneNo(jsonNode.get("phone").asString());
+			//librarian.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
-			user.setUpdatedBy(((LoginUserDetails) usr).getUser());
+			librarian.setUpdatedBy(((LoginUserDetails) usr).getUser());
 			try {
-				user = userService.saveUser(user);
+				librarian = librarianService.saveLibrarian(librarian);
 			} catch (Exception ex) {
 				ret.put("successfull", false);
 			}
-			ret.put("successfull", user.getId() != null);
+			ret.put("successfull", librarian.getId() != null);
 		}
 		return ret;
 
 	}
 
 	@DeleteMapping("/{id}")
-	public Map<String, Boolean> deleteUser(@PathVariable Long id) {
+	public Map<String, Boolean> deleteLibrarian(@PathVariable Long id) {
 		boolean status = true;
-		User user = new User();
-		user.setId(id);
+		Librarian librarian = new Librarian();
+		librarian.setId(id);
 		Map<String, Boolean> ret = new HashMap<>();
 		try {
-			userService.deleteUser(user);
+			librarianService.deleteLibrarian(librarian);
 		} catch (Exception ex) {
 			status = false;
 		}

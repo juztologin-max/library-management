@@ -25,10 +25,11 @@ public class SecurityConfiguration {
 		    .authorizeHttpRequests(auth -> 
 		    				    	 auth.requestMatchers( "/login","/common/**", "/widgets/**").permitAll()
 		    				    	     .requestMatchers("/admin/**").hasAuthority("ADMIN")
+		    				    	     .requestMatchers("/user/**").hasAuthority("USER")
 		     							 .anyRequest().authenticated())
 			.formLogin(loginForm -> 
 						   loginForm.loginPage("/login").loginProcessingUrl("/login")
-								 	.defaultSuccessUrl("/admin/dashboard",true)
+								 	.defaultSuccessUrl("/dashboard",true)
 								 	.failureHandler((req,res,ex)->	
 								 						res.sendRedirect("/login?message-type=error&message="
 								 							+ URLEncoder.encode("Incorrect username and/or password",StandardCharsets.UTF_8))))

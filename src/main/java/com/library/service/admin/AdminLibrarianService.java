@@ -1,4 +1,4 @@
-package com.library.service;
+package com.library.service.admin;
 
 import java.util.Optional;
 
@@ -8,7 +8,7 @@ import com.library.entity.Librarian;
 
 import tools.jackson.databind.JsonNode;
 
-public interface LibrarianService {
+public interface AdminLibrarianService {
 	public Librarian saveLibrarian(Librarian libr) ;
 	
 	public Optional<Librarian> findById(Long libr) ;

@@ -1,4 +1,4 @@
-package com.library.service;
+package com.library.service.admin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 
 import com.library.component.SearchSpecification;
 import com.library.entity.Book;
-import com.library.repository.BookRepository;
+import com.library.repository.admin.AdminBookRepository;
 
 import tools.jackson.databind.JsonNode;
 
 @Service
-public class BookServiceImpl implements BookService {
+public class AdminBookServiceImpl implements AdminBookService {
 	@Autowired
-	private BookRepository repo;
+	private AdminBookRepository repo;
 	@Autowired
 	private SearchSpecification<Book> spec;
 	

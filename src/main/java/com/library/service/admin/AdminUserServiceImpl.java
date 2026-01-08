@@ -1,4 +1,4 @@
-package com.library.service;
+package com.library.service.admin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,29 +14,30 @@ import org.springframework.stereotype.Service;
 
 import com.library.component.SearchSpecification;
 import com.library.entity.Librarian;
-import com.library.repository.LibrarianRepository;
+import com.library.entity.User;
+import com.library.repository.UserRepository;
 
 import tools.jackson.databind.JsonNode;
 
 @Service
-public class LibrarianServiceImpl implements LibrarianService {
+public class AdminUserServiceImpl implements AdminUserService {
 	@Autowired
-	private LibrarianRepository repo;
+	private UserRepository repo;
 	@Autowired
-	private SearchSpecification<Librarian> spec;
+	private SearchSpecification<User> spec;
 	
-	public Librarian saveLibrarian(Librarian libr) {
-		return repo.save(libr);
+	public User saveUser(User usr) {
+		return repo.save(usr);
 	}
 
-	public void deleteLibrarian(Librarian libr) {
-		repo.delete(libr);
+	public void deleteUser(User usr) {
+		repo.delete(usr);
 	}
 
 
 	
 
-	public Page<Librarian> listAll(JsonNode jsonNode) {
+	public Page<User> listAll(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
 		int limit = jsonNode.get("pageable").get("pageSize").asInt();
@@ -53,7 +54,7 @@ public class LibrarianServiceImpl implements LibrarianService {
 		return repo.findAll(pageable);
 	}
 
-	public Page<Librarian> findAll(JsonNode jsonNode) {
+	public Page<User> findAll(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
 		int limit = jsonNode.get("pageable").get("pageSize").asInt();
@@ -73,7 +74,7 @@ public class LibrarianServiceImpl implements LibrarianService {
 		
 	}
 	
-	public Optional<Librarian> findById(Long id) {
+	public Optional<User> findById(Long id) {
 		return repo.findById(id);
 	}
 	

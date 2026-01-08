@@ -1,4 +1,4 @@
-package com.library.controller;
+package com.library.controller.admin;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

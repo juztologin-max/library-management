@@ -1,4 +1,4 @@
-package com.library.controller;
+package com.library.controller.admin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import tools.jackson.databind.JsonNode;
 
 @RequestMapping("/admin/api/manage-admin")
 @RestController
-public class ManageAdminController {
+public class AdminManageAdminController {
 	@Autowired
 	private LoginUserService loginUserService;
 	@Autowired

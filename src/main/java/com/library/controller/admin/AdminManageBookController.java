@@ -1,4 +1,4 @@
-package com.library.controller;
+package com.library.controller.admin;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -22,16 +22,16 @@ import com.library.entity.Book;
 import com.library.entity.Librarian;
 import com.library.entity.LoginUser;
 import com.library.entity.LoginUserDetails;
-import com.library.service.BookService;
+import com.library.service.admin.AdminBookService;
 
 import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
 
 @RequestMapping("/admin/api/manage-book")
 @RestController
-public class ManageBookController {
+public class AdminManageBookController {
 	@Autowired
-	private BookService bookService;
+	private AdminBookService bookService;
 
 	@PostMapping("/save")
 	public Map<String, Boolean> saveBook(@RequestBody JsonNode jsonNode, @AuthenticationPrincipal UserDetails usr) {

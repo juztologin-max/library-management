@@ -1,4 +1,4 @@
-package com.library.service;
+package com.library.service.admin;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import com.library.entity.User;
 
 import tools.jackson.databind.JsonNode;
 
-public interface UserService {
+public interface AdminUserService {
 	public User saveUser(User libr) ;
 	
 	public Optional<User> findById(Long libr) ;

@@ -120,7 +120,11 @@ function saveBook() {
 function saveBookCallback() {
 	if (manageRequest.readyState == 4) {
 		var resp = manageRequest.response;
-		var card = document.getElementById("input-card-title");
+		const card = document.getElementById("input-card-title");
+		const coverpage = document.getElementById("coverpage");
+		const preImage = document.getElementById("preImage");
+		const coverpageContainer = document.getElementById("coverpage-container");
+
 		simpleTable.showFirstPage();
 		if (resp != null && resp['successfull'] == true) {
 			showAlert("success", successText, 'alert-placeholder');
@@ -135,6 +139,9 @@ function saveBookCallback() {
 		card.innerText = "Add Book";
 		successText = "Inserted Book";
 		failureText = "Could not insert book";
+		preImage.classList.remove('d-none');
+		coverpage.src="";
+		coverpageContainer.classList.add('d-none');
 
 	}
 
@@ -156,7 +163,7 @@ function deleteLibrarianCallback() {
 		}
 
 	}
-	
+
 }
 
 function deleteHandler(event) {
@@ -196,6 +203,9 @@ function editHandler(event) {
 	const submit = document.getElementById("submit-button");
 	const coverpage = document.getElementById("coverpage");
 	const card = document.getElementById("input-card-title");
+	const preImage = document.getElementById("preImage");
+	const coverpageContainer = document.getElementById("coverpage-container");
+
 	console.log(data);
 	name.value = data.name;
 	author.value = data.author;
@@ -205,8 +215,6 @@ function editHandler(event) {
 	description.value = data.description;
 	coverPageData = data.content;
 	coverpage.src = URL.createObjectURL(new Blob([Uint8Array.fromBase64(data.content)], { type: 'application/octet-stream' }));
-	const preImage = document.getElementById("preImage");
-	const coverpageContainer = document.getElementById("coverpage-container");
 	preImage.classList.add('d-none');
 	coverpageContainer.classList.remove('d-none');
 	submit.removeAttribute("disabled");
