@@ -6,17 +6,18 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.library.component.SearchSpecification;
 
 import com.library.entity.LoginUser;
+import com.library.entity.User;
 import com.library.repository.LoginUserRepository;
 
 import tools.jackson.databind.JsonNode;
@@ -26,7 +27,8 @@ public class LoginUserService {
 	@Autowired
 	private LoginUserRepository repo;
 	@Autowired
-	private SearchSpecification<LoginUser> spec;
+	private ConversionService conversionService;
+	
 	public LoginUser saveLoginUser(LoginUser usr) {
 		return repo.save(usr);
 	}
@@ -86,7 +88,8 @@ public class LoginUserService {
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 
-		spec.setJsonNode(jsonNode.get("searchable"));
+		Specification<LoginUser> spec = new SearchSpecification<>(jsonNode.get("searchable"),conversionService
+		);
 		return repo.findAll(spec, pageable);
 	}
 }

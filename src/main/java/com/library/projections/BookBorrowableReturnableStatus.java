@@ -1,4 +1,4 @@
-package com.library.other;
+package com.library.projections;
 
 public interface BookBorrowableReturnableStatus {
 	boolean isBorrowbleByUser();

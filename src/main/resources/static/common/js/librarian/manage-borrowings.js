@@ -5,15 +5,10 @@ var successText = "";
 var failureText = "";
 var method = "";
 var simpleTable;
-var currentCol = 1;
+
 var bookId;
 
-var coverPageData = null;
-function getCoverPage() {
-	const hiddenFileInput = document.getElementById("hidden-file-input");
-	hiddenFileInput.click();
 
-}
 
 
 
@@ -133,81 +128,29 @@ function buttonToggler(id) {
 
 
 function manageBookInit() {
-	const hiddenFileInput = document.getElementById("hidden-file-input");
-	hiddenFileInput.addEventListener('change', (event) => {
-		const list = event.target.files;
-		const coverpage = document.getElementById("coverpage");
-		const file = list[0];
-
-		const fileReader = new FileReader();
-
-		fileReader.onload = function(e) {
-
-
-			coverPageData = e.target.result;
-			coverpage.src = e.target.result;
-
-
-			coverpage.onload = function() {
-				const preImage = document.getElementById("preImage");
-				const coverpageContainer = document.getElementById("coverpage-container");
-				preImage.classList.add('d-none');
-				coverpageContainer.classList.remove('d-none');
-			};
-		};
-
-
-		fileReader.readAsDataURL(file);
-
-	});
-
 	const csrfHeader = document.querySelector('meta[name="crsf_header"]').getAttribute("content");
 	const csrfValue = document.querySelector('meta[name="crsf_value"]').getAttribute("content");
 	const hKMap = new Map([
-		['NAME', 'name'],
-		['AUTHOR', 'author'],
-		['PUBLISHER', 'publisher'],
-		['PUBLISHED DATE', 'publishedAt'],
-		['TOTAL', 'total'],
-		['DESCRIPTION', 'description'],
+		['BOOK','book.name'],
+		['BORROWER','user.legalName'],
+		['BORROW DATE', 'borrowDate'],
+		['STATUS', 'status']
+		
+		
 	]);
 	const inputTypes = new Map([
-		['PUBLISHED DATE', 'date']
-
-
+		['BORROW DATE', 'datetime'],
 	]);
 
-	let simpleTable = new SimpleTable("table-container1", "Books", hKMap, "api/manage-borrowing/list-books", csrfHeader, csrfValue, 0, 10, "NAME", "DSC", inputTypes, true);
+	let simpleTable = new SimpleTable("table-container1", "Books", hKMap, "api/manage-borrowing/list-borrowings", csrfHeader, csrfValue, 0, 10, "STATUS", "DSC", inputTypes, true);
 	//simpleTable.addSortableColumn("NAME", "ASC");
-	simpleTable.addEventListener("TakeFromTable", editHandler);
+	//simpleTable.addEventListener("TakeFromTable", editHandler);
 	//simpleTable.addEventListener("RemoveFromTable", deleteHandler);
-	simpleTable.addEventListener("NewTable", () => {
-		currentCol = 1;
-		simpleTable.selectRow(1);
-	});
-	simpleTable.setSearchUrl("api/manage-borrowing/search-books");
-	simpleTable.setCurrentColumns(["NAME", "AUTHOR", "PUBLISHER", "PUBLISHED DATE"]);
+	
+	simpleTable.setSearchUrl("api/manage-borrowing/search-borrowings");
+	simpleTable.setCurrentColumns(["BOOK","BORROWER","BORROW DATE","STATUS"]);
 	simpleTable.setShowEdit(false);
 	simpleTable.setShowDelete(false);
-
-	document.addEventListener('keydown', (e) => {
-		if (e.key === 'ArrowLeft') {
-			currentCol--;
-			if (currentCol < 1) {
-				currentCol = simpleTable.getRowCount();
-			}
-			simpleTable.selectRow(currentCol);
-		} else if (e.key === 'ArrowRight') {
-			currentCol++;
-			if (currentCol > simpleTable.getRowCount()) {
-				currentCol = 1;
-			}
-			simpleTable.selectRow(currentCol);
-		}
-
-
-	});
-
 }
 
 
@@ -219,36 +162,6 @@ function manageBookInit() {
 
 
 
-function editHandler(event) {
-
-	const data = event.detail;
-	const name = document.getElementById("name");
-	const author = document.getElementById("author");
-	const publisher = document.getElementById("publisher");
-	const publishedDate = document.getElementById("published-date");
-	const total = document.getElementById("total");
-	const description = document.getElementById("description");
-
-	const coverpage = document.getElementById("coverpage");
-
-	const preImage = document.getElementById("preImage");
-	const coverpageContainer = document.getElementById("coverpage-container");
-
-	buttonToggler(data.id);
-	name.value = data.name;
-	author.value = data.author;
-	publisher.value = data.publisher;
-	publishedDate.value = data.publishedAt;
-	total.value = data.total;
-	description.value = data.description;
-	coverPageData = data.content;
-	coverpage.src = URL.createObjectURL(new Blob([Uint8Array.fromBase64(data.content)], { type: 'application/octet-stream' }));
-	preImage.classList.add('d-none');
-	coverpageContainer.classList.remove('d-none');
-
-
-
-}
 
 
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +17,8 @@ import com.library.component.SearchSpecification;
 import com.library.entity.Book;
 import com.library.entity.Borrowing;
 import com.library.entity.User;
-import com.library.other.BookBorrowableReturnableStatus;
 import com.library.other.BorrowStatus;
+import com.library.projections.BookBorrowableReturnableStatus;
 import com.library.repository.user.UserBookRepository;
 
 import jakarta.transaction.Transactional;
@@ -28,8 +29,8 @@ public class UserBorrowingServiceImpl implements UserBorrowingService {
 	@Autowired
 	private UserBookRepository bookRepo;
 	@Autowired
-	private SearchSpecification<Book> spec;
-
+	private ConversionService conversionService;
+	
 	public Page<Book> listAllBooks(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
@@ -63,13 +64,13 @@ public class UserBorrowingServiceImpl implements UserBorrowingService {
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 
-		spec.setJsonNode(jsonNode.get("searchable"));
+		SearchSpecification<Book> spec = new SearchSpecification<>(jsonNode.get("searchable"), conversionService);
 		return bookRepo.findAll(spec, pageable);
 
 	}
-	
+
 	public BookBorrowableReturnableStatus isBorrowableReturnableByUser(Long userId, Long bookId) {
-		BookBorrowableReturnableStatus temp =bookRepo.getbookBorrowableReturnableStatus(userId, bookId);
+		BookBorrowableReturnableStatus temp = bookRepo.getbookBorrowableReturnableStatus(userId, bookId);
 		System.out.println(temp.isBorrowbleByUser());
 		System.out.println(temp.isReturnableByUser());
 		return temp;
@@ -77,7 +78,7 @@ public class UserBorrowingServiceImpl implements UserBorrowingService {
 
 	@Override
 	@Transactional
-	public void borrowBook(User user,Long bookId) {
+	public void borrowBook(User user, Long bookId) {
 		Book book = bookRepo.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
 		Borrowing borrowing = new Borrowing();
 		borrowing.setUser(user);
@@ -87,11 +88,10 @@ public class UserBorrowingServiceImpl implements UserBorrowingService {
 		book.addBorrowing(borrowing);
 		bookRepo.save(book);
 	}
-	
-	
+
 	@Override
 	@Transactional
-	public void returnBook(User user,Long bookId) {
+	public void returnBook(User user, Long bookId) {
 		Book book = bookRepo.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
 		Borrowing borrowing = book.getBorrowingOfUser(user.getId()).get();
 		borrowing.setStatus(BorrowStatus.RETURN);

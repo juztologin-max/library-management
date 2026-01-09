@@ -930,9 +930,9 @@ SimpleTable.prototype.createTable = function() {
 	var inner = document.createElement("div");
 	if (this.hKMap.size <= 2) {
 		inner.classList.add("col-md-6", "col-lg-4");
-	} else if (this.hKMap.size > 2 && this.hKMap.size <= 4) {
+	} else if (this.hKMap.size > 2 && this.hKMap.size < 4) {
 		inner.classList.add("col-md-10", "col-lg-6");
-	} else if (this.hKMap.size > 4) {
+	} else if (this.hKMap.size >= 4) {
 		inner.classList.add("col-md-12", "col-lg-12");
 	}
 	this.container.appendChild(inner);

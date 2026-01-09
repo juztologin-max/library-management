@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.library.entity.Book;
-import com.library.entity.Librarian;
-import com.library.entity.LoginUser;
 import com.library.entity.LoginUserDetails;
 import com.library.service.admin.AdminBookService;
 

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.library.entity.Book;
-import com.library.other.BookBorrowableReturnableStatus;
+import com.library.projections.BookBorrowableReturnableStatus;
 
 public interface UserBookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
 

@@ -6,10 +6,12 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.library.component.SearchSpecification;
@@ -24,7 +26,8 @@ public class AdminUserServiceImpl implements AdminUserService {
 	@Autowired
 	private AdminUserRepository repo;
 	@Autowired
-	private SearchSpecification<User> spec;
+	private ConversionService conversionService;
+	
 	
 	public User saveUser(User usr) {
 		return repo.save(usr);
@@ -69,7 +72,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 
-		spec.setJsonNode(jsonNode.get("searchable"));
+		Specification<User> spec = new SearchSpecification<>(jsonNode.get("searchable"),conversionService);
 		return repo.findAll(spec, pageable);
 		
 	}

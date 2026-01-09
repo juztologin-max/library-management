@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.library.entity.Book;
 import com.library.entity.LoginUserDetails;
-import com.library.other.BookBorrowableReturnableStatus;
+import com.library.projections.BookBorrowableReturnableStatus;
 import com.library.service.admin.AdminUserService;
 import com.library.service.user.UserBorrowingService;
 

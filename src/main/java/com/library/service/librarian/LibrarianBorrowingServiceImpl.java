@@ -1,36 +1,33 @@
 package com.library.service.librarian;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.library.component.SearchSpecification;
-import com.library.entity.Book;
 import com.library.entity.Borrowing;
-import com.library.entity.User;
-import com.library.other.BookBorrowableReturnableStatus;
-import com.library.other.BorrowStatus;
-import com.library.repository.user.UserBookRepository;
+import com.library.projections.librarian.LibrarianBorrowingProjection;
+import com.library.repository.librarian.LibrarianBorrowingRepository;
 
-import jakarta.transaction.Transactional;
 import tools.jackson.databind.JsonNode;
 
 @Service
 public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService {
 	@Autowired
-	private UserBookRepository bookRepo;
+	private LibrarianBorrowingRepository borrowingRepo;
 	@Autowired
-	private SearchSpecification<Book> spec;
-
-	public Page<Book> listAllBooks(JsonNode jsonNode) {
+	private ConversionService conversionService;
+	
+	public Page<LibrarianBorrowingProjection> listAllBorrwings(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
 		int limit = jsonNode.get("pageable").get("pageSize").asInt();
@@ -45,10 +42,10 @@ public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService 
 		}
 
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
-		return bookRepo.findAll(pageable);
+		return borrowingRepo.findAllProjectedBy(pageable);
 	}
 
-	public Page<Book> findAll(JsonNode jsonNode) {
+	public Page<LibrarianBorrowingProjection> findAll(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
 		int limit = jsonNode.get("pageable").get("pageSize").asInt();
@@ -62,41 +59,11 @@ public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService 
 
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
-
-		spec.setJsonNode(jsonNode.get("searchable"));
-		return bookRepo.findAll(spec, pageable);
-
-	}
-	
-	public BookBorrowableReturnableStatus isBorrowableReturnableByUser(Long userId, Long bookId) {
-		BookBorrowableReturnableStatus temp =bookRepo.getbookBorrowableReturnableStatus(userId, bookId);
-		System.out.println(temp.isBorrowbleByUser());
-		System.out.println(temp.isReturnableByUser());
-		return temp;
-	}
-
-	@Override
-	@Transactional
-	public void borrowBook(User user,Long bookId) {
-		Book book = bookRepo.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
-		Borrowing borrowing = new Borrowing();
-		borrowing.setUser(user);
-		borrowing.setBook(book);
-		borrowing.setBorrowDate(LocalDateTime.now());
-		borrowing.setStatus(BorrowStatus.BORROW);
-		book.addBorrowing(borrowing);
-		bookRepo.save(book);
-	}
-	
-	
-	@Override
-	@Transactional
-	public void returnBook(User user,Long bookId) {
-		Book book = bookRepo.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
-		Borrowing borrowing = book.getBorrowingOfUser(user.getId()).get();
-		borrowing.setStatus(BorrowStatus.RETURN);
-		book.updateBorrowingOfUser(borrowing);
-		bookRepo.save(book);
+		Specification<Borrowing> spec = new SearchSpecification<>(jsonNode.get("searchable"),conversionService);
+	    
+	    return borrowingRepo.findAllProjectedBy(spec, pageable);
+		
+		
 	}
 
 }

@@ -20,15 +20,16 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import tools.jackson.databind.JsonNode;
 
-@Component
+
 public class SearchSpecification<T> implements Specification<T> {
 
-	private JsonNode jsonNode;
-	@Autowired
-	private ConversionService conversionService;
+	private final JsonNode jsonNode;
+	
+	private final ConversionService conversionService;
 
-	public void setJsonNode(JsonNode jsonNode) {
+	public SearchSpecification(JsonNode jsonNode,ConversionService conversionService) {
 		this.jsonNode = jsonNode;
+		this.conversionService=conversionService;
 	}
 
 	private static final long serialVersionUID = 1L;

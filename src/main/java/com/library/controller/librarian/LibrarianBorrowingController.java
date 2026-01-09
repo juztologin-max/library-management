@@ -7,29 +7,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.library.entity.Book;
-import com.library.service.admin.AdminUserService;
+import com.library.projections.librarian.LibrarianBorrowingProjection;
 import com.library.service.librarian.LibrarianBorrowingService;
 
 import tools.jackson.databind.JsonNode;
 
-@RequestMapping("/user/api/manage-borrowing")
+@RequestMapping("/librarian/api/manage-borrowing")
 @RestController
 public class LibrarianBorrowingController {
 	@Autowired
 	private LibrarianBorrowingService librarianBorrowingService;
 
-	@Autowired
-	private AdminUserService userService;
+	
 
 	@PostMapping("/list-borrowings")
-	public PagedModel<Book> listBorrowings(@RequestBody JsonNode payload) {
+	public PagedModel<LibrarianBorrowingProjection> listBorrowings(@RequestBody JsonNode payload) {
 		return new PagedModel<>(librarianBorrowingService.listAllBorrwings(payload));
 
 	}
 
 	@PostMapping("/search-borrowings")
-	public PagedModel<Book> getListOfBorrwingsMatching(@RequestBody JsonNode payload) {
+	public PagedModel<LibrarianBorrowingProjection> getListOfBorrwingsMatching(@RequestBody JsonNode payload) {
 		return new PagedModel<>(librarianBorrowingService.findAll(payload));
 
 	}

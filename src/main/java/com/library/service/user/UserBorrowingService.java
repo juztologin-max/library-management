@@ -1,11 +1,10 @@
 package com.library.service.user;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 
 import com.library.entity.Book;
 import com.library.entity.User;
-import com.library.other.BookBorrowableReturnableStatus;
+import com.library.projections.BookBorrowableReturnableStatus;
 
 import jakarta.transaction.Transactional;
 import tools.jackson.databind.JsonNode;

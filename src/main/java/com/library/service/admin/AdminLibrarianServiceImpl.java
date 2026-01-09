@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,8 @@ public class AdminLibrarianServiceImpl implements AdminLibrarianService {
 	@Autowired
 	private AdminLibrarianRepository repo;
 	@Autowired
-	private SearchSpecification<Librarian> spec;
+	private ConversionService conversionService;
+	
 	
 	public Librarian saveLibrarian(Librarian libr) {
 		return repo.save(libr);
@@ -68,7 +70,8 @@ public class AdminLibrarianServiceImpl implements AdminLibrarianService {
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 
-		spec.setJsonNode(jsonNode.get("searchable"));
+		SearchSpecification<Librarian> spec=new SearchSpecification(jsonNode.get("searchable"),
+				conversionService);
 		return repo.findAll(spec, pageable);
 		
 	}
