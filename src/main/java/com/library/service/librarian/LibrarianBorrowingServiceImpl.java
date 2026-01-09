@@ -1,4 +1,4 @@
-package com.library.service.user;
+package com.library.service.librarian;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import jakarta.transaction.Transactional;
 import tools.jackson.databind.JsonNode;
 
 @Service
-public class UserBorrowingServiceImpl implements UserBorrowingService {
+public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService {
 	@Autowired
 	private UserBookRepository bookRepo;
 	@Autowired

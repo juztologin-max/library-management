@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.library.component.SearchSpecification;
+import com.library.entity.LoginUser;
 import com.library.entity.User;
 import com.library.repository.admin.AdminUserRepository;
 
@@ -76,5 +77,10 @@ public class AdminUserServiceImpl implements AdminUserService {
 	public Optional<User> findById(Long id) {
 		return repo.findById(id);
 	}
+	
+	public Optional<User> findByLoginUser(LoginUser lusr) {
+		return repo.findByLoginUser(lusr);
+	}
+	
 	
 }

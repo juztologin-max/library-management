@@ -1,4 +1,4 @@
-package com.library.service.user;
+package com.library.service.librarian;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +10,7 @@ import com.library.other.BookBorrowableReturnableStatus;
 import jakarta.transaction.Transactional;
 import tools.jackson.databind.JsonNode;
 
-public interface UserBorrowingService {
+public interface LibrarianBorrowingService {
 
 	@Transactional
 	public void borrowBook(User user,Long bookId);

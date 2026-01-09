@@ -16,26 +16,28 @@ import jakarta.validation.Valid;
 
 public class DashboardController {
 
-    @GetMapping("/dashboard")
-    @Valid
-    public String getAdminDashboard(@AuthenticationPrincipal UserDetails usr) throws Exception {
-    	String ret="";
-    	for(GrantedAuthority authority:usr.getAuthorities()) {
-    		if(authority.toString().equals("ADMIN")) {
-    			ret="redirect:/admin/dashboard";
-    			break;
-    		}else if(authority.toString().equals("USER")) {
-    			ret="redirect:/user/dashboard";
-    			break;
-    		}
-    		
-    		else {
-    			throw new Exception("Unknown User type: "+authority.toString());
-    		}
-    		
-    	
-    	}
-    	return ret;   
-    }
+	@GetMapping("/dashboard")
+	@Valid
+	public String getAdminDashboard(@AuthenticationPrincipal UserDetails usr) throws Exception {
+		String ret = "";
+		for (GrantedAuthority authority : usr.getAuthorities()) {
+			if (authority.toString().equals("ADMIN")) {
+				ret = "redirect:/admin/dashboard";
+				break;
+			} else if (authority.toString().equals("USER")) {
+				ret = "redirect:/user/dashboard";
+				break;
+			} else if (authority.toString().equals("LIBRARIAN")) {
+				ret = "redirect:/librarian/dashboard";
+				break;
+			}
 
- }
+			else {
+				throw new Exception("Unknown User type: " + authority.toString());
+			}
+
+		}
+		return ret;
+	}
+
+}

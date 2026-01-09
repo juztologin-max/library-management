@@ -3,6 +3,8 @@ package com.library.entity;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import com.library.other.BorrowStatus;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

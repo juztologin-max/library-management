@@ -589,6 +589,11 @@ SimpleTable.prototype._createDateInputHeaderElement = function(columnHeader, tab
 	li.setAttribute("id", tableId + columnHeader + "liNone");
 	li.classList.add("dropdown-item", "active");
 	li.innerText = "None";
+	li.addEventListener("click",()=>{
+		this.saveStore.set(columnHeader, ()=>{
+			this.resetAndShowFirstPage();
+		});
+	});
 	ul.appendChild(li);
 
 	dropDownContainer.appendChild(but);
@@ -804,6 +809,7 @@ SimpleTable.prototype._createTableBody = function() {
 			bodyRow.appendChild(cell);
 		}
 		if (this.showEdit) {
+			
 			var button = document.createElement("button");
 			button.classList.add("btn", "btn-sm", "btn-primary");
 			button.textContent = "Edit";

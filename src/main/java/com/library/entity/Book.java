@@ -2,9 +2,12 @@ package com.library.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -38,6 +42,19 @@ public final class Book {
 	@Column(nullable = false, length = 100)
 	private String publisher;
 
+	@Lob
+	@Column(name = "cover_page", columnDefinition = "MEDIUMBLOB")
+	private byte[] content;
+
+	@Column(nullable = false)
+	private Long total;
+
+	@Column(nullable = false)
+	private LocalDate publishedAt;
+
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Borrowing> borrowings;
+
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
@@ -52,15 +69,9 @@ public final class Book {
 	@JoinColumn(name = "updater_login_user_id", nullable = false) // foreign key
 	private LoginUser updatedBy;
 
-	@Lob
-	@Column(name = "cover_page",columnDefinition = "MEDIUMBLOB")
-	private byte[] content;
-
-	@Column(nullable = false)
-	private Long total;
-
-	@Column(nullable = false)
-	private LocalDate publishedAt;
+	public Book() {
+		borrowings = new ArrayList<>();
+	}
 
 	public Long getId() {
 		return id;
@@ -162,6 +173,39 @@ public final class Book {
 		this.total = total;
 	}
 
+	public void addBorrowing(Borrowing borrowing) {
+		borrowings.add(borrowing);
+		borrowing.setBook(this);
+	}
+
+	public void removeBorrowing(Borrowing borrowing) {
+		borrowings.remove(borrowing);
+
+	}
+
+	public Optional<Borrowing> getBorrowingOfUser(Long userId) {
+
+		for (Borrowing borrow : borrowings) {
+
+			if (borrow.getUser().getId().equals(userId)) {
+				return Optional.of(borrow);
+			}
+		}
+		return null;
+	}
+
+	public void updateBorrowingOfUser(Borrowing borrowing) {
+		int index = -1;
+		for (Borrowing borrow : borrowings) {
+			index++;
+			if (borrow.getUser().getId().equals(borrowing.getUser().getId())) {
+				break;
+			}
+		}
+		borrowings.set(index, borrowing);
+
+	}
+
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -171,9 +215,6 @@ public final class Book {
 	protected void onUpdate() {
 		this.updatedAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
-	}
-
-	public Book() {
 	}
 
 }
