@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<div th:fragment="content" class="container mt-2">
+	<script src="/widgets/simple-table/js/simple-table.js"></script>
+	<script src="/common/js/alert.js"></script>
+	<script src="/common/js/librarian/manage-book.js"></script>
+
+
+	<div class="row justify-content-center">
+		<div class="col-md-10 col-lg-7">
+			<div class="card shadow-sm">
+				<div class="card-header fw-bold" id="input-card-title">Add
+					Book</div>
+				<div class="card-body">
+					<div id="login-form">
+						<div id="alert-placeholder"></div>
+						<div class="container">
+							<div class="row g-4">
+								<div class="col col-7">
+									<div class="card-container" onclick="getCoverPage()">
+										<div id="preImage" class="h-100">
+											<input type="file" class="d-none" id="hidden-file-input"
+												accept="image/*">
+											<div
+												class="card-body border rounded-3 d-flex justify-content-center  align-items-center w-100"
+												style="min-height: 200px;  cursor: pointer;">
+
+												<p class="card-text">
+													<span class="col-12 ">Select a cover page</span>
+												</p>
+											</div>
+										</div>
+										<div id="coverpage-container" class="card d-none">
+											<img id="coverpage" src="" class="card-img-top"
+												alt="Cover Page" style="min-height: 200px; cursor: pointer;">
+										</div>
+									</div>
+								</div>
+
+								<div class="col col-5">
+									<div class="form-floating mb-2">
+										<input type="text" class="form-control" id="name"
+											placeholder="Enter name" required> <label for="name">Name</label>
+									</div>
+
+									<div class="form-floating mb-2">
+										<input type="text" class="form-control" id="author"
+											placeholder="Enter password" required> <label
+											for="author">Author</label>
+									</div>
+
+									<div class="form-floating mb-2">
+										<input type="text" class="form-control" id="publisher"
+											placeholder="Enter password" required> <label
+											for="author">Publisher</label>
+									</div>
+									<div class="form-floating mb-2">
+										<input type="date" class="form-control" id="published-date"
+											placeholder="Enter password" required> <label
+											for="author">Published Date</label>
+									</div>
+
+									<div class="form-floating mb-2">
+										<input type="number" class="form-control" id="total"
+											placeholder="Enter password" required> <label
+											for="total">Total</label>
+									</div>
+									<div class="form-floating mb-2">
+										<textarea type="number" class="form-control" id="description"
+											placeholder="Enter password" required></textarea>
+										<label for="author">Description</label>
+									</div>
+									<button type="button" id="submit-button"
+										class="btn btn-primary w-100" onclick="saveBook()">Submit</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+<div class="simple-table-class-container" id="table-container1"></div>
+</div>
+
+</html>
