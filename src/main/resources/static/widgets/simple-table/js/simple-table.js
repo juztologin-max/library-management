@@ -1,4 +1,4 @@
-function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfValue, start, limit, sortColumn, sortDirection, inputTypes, rowClick) {
+function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfValue, start, limit, sortColumn, sortDirection, inputTypes, rowClick, hProjectionMap) {
 	this.tableContainerName = tableContainerName;
 	this.tableId = "table1";
 	this.titleText = title;
@@ -45,7 +45,7 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 	this.showEdit = true;
 	this.showDelete = true;
 	this.rowClick = rowClick;
-
+	this.hProjectionMap = hProjectionMap;
 }
 
 SimpleTable.prototype.setAlternateButton = function(name, callback, headerName, predicate) {
@@ -1124,6 +1124,11 @@ SimpleTable.prototype.fetchSearchData = async function() {
 				var current = this.saveStore.get(key);
 				if (current != null && current.value != "") {
 					var columnName = this.hKMap.get(key);
+					if (this.hProjectionMap != null) {
+						if (this.hProjectionMap.get(key) != null) {
+							columnName = this.hProjectionMap.get(key);
+						}
+					}
 					if (this.inputTypes.get(key) === 'text' || this.inputTypes.get(key) === 'email') {
 						searchables.set(columnName, { [current.option]: { "var": current.value } });
 					} else if (this.inputTypes.get(key) === 'checkbox') {

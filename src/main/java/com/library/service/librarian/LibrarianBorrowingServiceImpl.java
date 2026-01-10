@@ -61,8 +61,9 @@ public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService 
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 		Specification<Borrowing> spec = new SearchSpecification<>(jsonNode.get("searchable"), conversionService);
-
-		return borrowingRepo.findAllBorrowingsBy(spec, pageable);
+		return borrowingRepo.findBy(spec, q -> q
+	            .as(LibrarianBorrowingProjection.class)
+	            .page(pageable));
 
 	}
 

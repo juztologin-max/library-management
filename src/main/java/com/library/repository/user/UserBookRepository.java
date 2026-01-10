@@ -12,9 +12,9 @@ public interface UserBookRepository extends JpaRepository<Book, Long>, JpaSpecif
 
 	@Query("""
 			SELECT
-			 	((COUNT(CASE WHEN bo.status NOT IN ( 'RETURN_ACCEPTED') THEN 1 END) < b.total) AND
-			    	(COUNT(CASE WHEN bo.status NOT IN ('RETURN', 'RETURN_ACCEPTED') AND bo.user.id = :userId THEN 1 END) < 1)) AS borrowbleByUser,
-			     (COUNT(CASE WHEN bo.status NOT IN ('RETURN', 'RETURN_ACCEPTED','BORROW') AND bo.user.id = :userId THEN 1 END) >= 1) AS returnableByUser
+			 	((COUNT(CASE WHEN bo.status  IN ( 'BORROW','BORROW_ACCEPTED','RETURN') THEN 1 END) < b.total) AND
+			    	(COUNT(CASE WHEN bo.status IN ('BORROW', 'BORROW_ACCEPTED','RETURN') AND bo.user.id = :userId THEN 1 END) < 1)) AS borrowbleByUser,
+			     (COUNT(CASE WHEN bo.status  IN ('BORROW_ACCEPTED') AND bo.user.id = :userId THEN 1 END) >= 1) AS returnableByUser
 			 FROM Book b
 			 	LEFT JOIN b.borrowings bo
 			 WHERE b.id = :bookId

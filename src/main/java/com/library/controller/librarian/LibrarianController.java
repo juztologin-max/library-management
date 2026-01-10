@@ -45,8 +45,8 @@ public class LibrarianController {
 		UserDTO userDTO = new UserDTO();
 		userDTO.setName(usr.getUsername());
 		m.addAttribute("usr", userDTO);
-		m.addAttribute("title", "Manage Books");
-		m.addAttribute("mainMenuItem", "Manage Books");
+		m.addAttribute("title", "Manage Book");
+		m.addAttribute("mainMenuItem", "Manage Book");
 		m.addAttribute("content", "admin/manage-book :: content");
 		return "librarian/librarian-layout";
 	}
