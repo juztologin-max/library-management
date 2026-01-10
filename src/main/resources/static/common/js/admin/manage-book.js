@@ -51,7 +51,8 @@ function manageBookInit() {
 		['DESCRIPTION', 'description'],
 	]);
 	const inputTypes = new Map([
-		['PUBLISHED DATE', 'date']
+		['PUBLISHED DATE', 'date'],
+		['TOTAL','number']
 
 
 	]);
