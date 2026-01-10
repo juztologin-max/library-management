@@ -15,6 +15,8 @@ public interface LibrarianBorrowingService {
 
 	void acceptBorrowingOrReturning(Long borrowingId);
 
+	void deleteBorrowing(Long borrowingId);
+
 
 
 	

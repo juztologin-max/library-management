@@ -86,16 +86,7 @@ public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService 
 	public void deleteBorrowing(Long borrowingId) {
 		Borrowing borrowing = borrowingRepo.findById(borrowingId)
 				.orElseThrow(() -> new RuntimeException("Borrowing not found"));
-		if (borrowing.getStatus().equals(BorrowStatus.BORROW)) {
-			borrowing.setStatus(BorrowStatus.BORROW_ACCEPTED);
-
-		} else if (borrowing.getStatus().equals(BorrowStatus.RETURN)) {
-			borrowing.setStatus(BorrowStatus.RETURN_ACCEPTED);
-		} else {
-			new RuntimeException("Status not one of BORROW or RETURN");
-		}
-
-		borrowingRepo.save(borrowing);
+		borrowingRepo.delete(borrowing);
 	}
 
 }

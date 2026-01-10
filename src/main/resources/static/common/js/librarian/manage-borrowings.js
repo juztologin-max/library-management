@@ -65,10 +65,10 @@ function deleteCallback() {
 
 		if (resp != null && resp['successfull'] == true) {
 
-			showAlert("success", successText, 'alert-placeholder');
+			showAlert("success", "Successfully Deleted Borrowing", 'alert-placeholder');
 
 		} else {
-			showAlert("danger", failureText, 'alert-placeholder');
+			showAlert("danger", "Could not delete Borrowing", 'alert-placeholder');
 		}
 
 	simpleTable.resetAndShowFirstPage();
