@@ -48,6 +48,15 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 
 }
 
+SimpleTable.prototype.setAlternateButton = function(name, callback, headerName, predicate) {
+	this.alternateButton = {
+		name: name,
+		callback: callback,
+		headerName: headerName,
+		predicate: predicate
+	};
+}
+
 SimpleTable.prototype.setCurrentColumns = function(columns) {
 	this.currentColumns = columns;
 }
@@ -589,8 +598,8 @@ SimpleTable.prototype._createDateInputHeaderElement = function(columnHeader, tab
 	li.setAttribute("id", tableId + columnHeader + "liNone");
 	li.classList.add("dropdown-item", "active");
 	li.innerText = "None";
-	li.addEventListener("click",()=>{
-		this.saveStore.set(columnHeader, ()=>{
+	li.addEventListener("click", () => {
+		this.saveStore.set(columnHeader, () => {
 			this.resetAndShowFirstPage();
 		});
 	});
@@ -758,6 +767,11 @@ SimpleTable.prototype._createTableHead = function() {
 			this.showFirstPage();
 		});
 	}
+	if (this.alternateButton != null) {
+		header = document.createElement("th")
+		header.textContent = this.alternateButton.headerName;
+		headRow.appendChild(header);
+	}
 	if (this.showEdit) {
 		header = document.createElement("th")
 		header.textContent = "EDIT";
@@ -768,6 +782,7 @@ SimpleTable.prototype._createTableHead = function() {
 		header.textContent = "DELETE";
 		headRow.appendChild(header);
 	}
+
 	thead.appendChild(headRow);
 	return thead;
 
@@ -808,8 +823,25 @@ SimpleTable.prototype._createTableBody = function() {
 
 			bodyRow.appendChild(cell);
 		}
+		if (this.alternateButton) {
+			button = document.createElement("button");
+			button.classList.add("btn", "btn-sm", "btn-primary");
+			button.textContent = this.alternateButton.name;
+			if (this.alternateButton.predicate({ detail: this.source[i] })) {
+				button.removeAttribute("disabled");
+			} else {
+				button.setAttribute("disabled", true);
+			}
+			button.addEventListener("click", () => {
+				this.alternateButton.callback({ detail: this.source[i] });
+			});
+
+			cell = document.createElement("td");
+			cell.appendChild(button);
+			bodyRow.appendChild(cell);
+		}
 		if (this.showEdit) {
-			
+
 			var button = document.createElement("button");
 			button.classList.add("btn", "btn-sm", "btn-primary");
 			button.textContent = "Edit";
@@ -822,7 +854,7 @@ SimpleTable.prototype._createTableBody = function() {
 			cell.appendChild(button);
 			bodyRow.appendChild(cell);
 		}
-		console.log(this.showDelete);
+
 		if (this.showDelete) {
 			button = document.createElement("button");
 			button.classList.add("btn", "btn-sm", "btn-danger");
@@ -836,6 +868,9 @@ SimpleTable.prototype._createTableBody = function() {
 			cell.appendChild(button);
 			bodyRow.appendChild(cell);
 		}
+
+
+
 		tbody.appendChild(bodyRow);
 
 	}

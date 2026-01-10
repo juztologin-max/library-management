@@ -13,6 +13,8 @@ public interface LibrarianBorrowingService {
 
 	public Page<LibrarianBorrowingProjection> findAll(JsonNode jsonNode);
 
+	void acceptBorrowingOrReturning(Long borrowingId);
+
 
 
 	

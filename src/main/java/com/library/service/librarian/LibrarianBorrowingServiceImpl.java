@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.library.component.SearchSpecification;
 import com.library.entity.Borrowing;
+import com.library.other.BorrowStatus;
 import com.library.projections.librarian.LibrarianBorrowingProjection;
 import com.library.repository.librarian.LibrarianBorrowingRepository;
 
@@ -26,7 +27,7 @@ public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService 
 	private LibrarianBorrowingRepository borrowingRepo;
 	@Autowired
 	private ConversionService conversionService;
-	
+
 	public Page<LibrarianBorrowingProjection> listAllBorrwings(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
@@ -42,7 +43,7 @@ public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService 
 		}
 
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
-		return borrowingRepo.findAllProjectedBy(pageable);
+		return borrowingRepo.findAllBorrowingsBy(pageable);
 	}
 
 	public Page<LibrarianBorrowingProjection> findAll(JsonNode jsonNode) {
@@ -59,11 +60,42 @@ public class LibrarianBorrowingServiceImpl implements LibrarianBorrowingService 
 
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
-		Specification<Borrowing> spec = new SearchSpecification<>(jsonNode.get("searchable"),conversionService);
-	    
-	    return borrowingRepo.findAllProjectedBy(spec, pageable);
-		
-		
+		Specification<Borrowing> spec = new SearchSpecification<>(jsonNode.get("searchable"), conversionService);
+
+		return borrowingRepo.findAllBorrowingsBy(spec, pageable);
+
+	}
+
+	@Override
+	public void acceptBorrowingOrReturning(Long borrowingId) {
+		Borrowing borrowing = borrowingRepo.findById(borrowingId)
+				.orElseThrow(() -> new RuntimeException("Borrowing not found"));
+		if (borrowing.getStatus().equals(BorrowStatus.BORROW)) {
+			borrowing.setStatus(BorrowStatus.BORROW_ACCEPTED);
+
+		} else if (borrowing.getStatus().equals(BorrowStatus.RETURN)) {
+			borrowing.setStatus(BorrowStatus.RETURN_ACCEPTED);
+		} else {
+			new RuntimeException("Status not one of BORROW or RETURN");
+		}
+
+		borrowingRepo.save(borrowing);
+	}
+	
+	@Override
+	public void deleteBorrowing(Long borrowingId) {
+		Borrowing borrowing = borrowingRepo.findById(borrowingId)
+				.orElseThrow(() -> new RuntimeException("Borrowing not found"));
+		if (borrowing.getStatus().equals(BorrowStatus.BORROW)) {
+			borrowing.setStatus(BorrowStatus.BORROW_ACCEPTED);
+
+		} else if (borrowing.getStatus().equals(BorrowStatus.RETURN)) {
+			borrowing.setStatus(BorrowStatus.RETURN_ACCEPTED);
+		} else {
+			new RuntimeException("Status not one of BORROW or RETURN");
+		}
+
+		borrowingRepo.save(borrowing);
 	}
 
 }
