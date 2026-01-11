@@ -25,9 +25,6 @@ public class LibrarianDuesController {
 		return new PagedModel<>(librarianDuesService.listAll(payload));
 
 	}
-	@PostMapping("/search-dues")
-	public PagedModel<LibrarianDuesProjection> getListOfBorrwingsMatching(@RequestBody JsonNode payload) {
-		return new PagedModel<>(librarianDuesService.findAll(payload));
-	}
+	
 
 	}

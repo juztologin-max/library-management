@@ -1,4 +1,4 @@
-function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfValue, start, limit, sortColumn, sortDirection, inputTypes, rowClick, hProjectionMap) {
+function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfValue, start, limit, sortColumn, sortDirection, inputTypes, rowClick, hProjectionMap, enableSearch) {
 	this.tableContainerName = tableContainerName;
 	this.tableId = "table1";
 	this.titleText = title;
@@ -13,7 +13,7 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 	this.initialSortColumn = sortColumn;
 	this.initialSortDirection = sortDirection;
 	this.sortables = new Map([[this.initialSortColumn, this.initialSortDirection]]);
-	this.searchEnabled = false;
+	this.searchEnabled = enableSearch != null ? enableSearch : true;
 	this.totalPages = 0;
 	this.saveStore = new Map();
 	this.inputTypes = inputTypes;
@@ -46,6 +46,7 @@ function SimpleTable(tableContainerName, title, hKMap, sourceURL, crsfKey, crsfV
 	this.showDelete = true;
 	this.rowClick = rowClick;
 	this.hProjectionMap = hProjectionMap;
+
 }
 
 SimpleTable.prototype.setAlternateButton = function(name, callback, headerName, predicate) {
@@ -885,6 +886,7 @@ SimpleTable.prototype._createTableBody = function() {
 }
 
 SimpleTable.prototype._createSearchBut = function() {
+
 	var searchBut = document.createElement("button");
 	searchBut.classList.add("btn", "btn-sm", "btn-outline-primary", "bi", "bi-search");
 	searchBut.addEventListener("click", () => {
@@ -998,13 +1000,14 @@ SimpleTable.prototype.createTable = function() {
 	bContainer.appendChild(bBut);
 	var searchNavContainer = document.createElement("div");
 	searchNavContainer.classList.add("d-flex", "gap-2");
-	var searchBut = this._createSearchBut();
-	searchNavContainer.appendChild(searchBut);
+	if (this.searchEnabled) {
+		var searchBut = this._createSearchBut();
+		searchNavContainer.appendChild(searchBut);
+	}
 	var columnBut = this._createColumnsShownSelector();
 	searchNavContainer.appendChild(columnBut);
 	searchNavContainer.appendChild(bContainer);
 	cardHeader.appendChild(searchNavContainer);
-
 
 	var cardBody = document.createElement("div");
 	cardBody.classList.add("card-body", "p-1");

@@ -10,7 +10,6 @@ public interface LibrarianDuesService {
 
 	public Page<LibrarianDuesProjection> listAll(JsonNode jsonNode) ;
 
-	public Page<LibrarianDuesProjection> findAll(JsonNode jsonNode) ;
 	
 	
 
