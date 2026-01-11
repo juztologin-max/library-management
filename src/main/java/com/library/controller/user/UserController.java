@@ -38,5 +38,16 @@ public class UserController {
         m.addAttribute("content", "user/manage-borrowing :: content");
         return "user/user-layout";
     }
+    @GetMapping("/dues")
+    @Valid
+    public String getUserDues(Model m, @AuthenticationPrincipal UserDetails usr) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName(usr.getUsername());
+        m.addAttribute("usr", userDTO);
+        m.addAttribute("title", "Dues");
+        m.addAttribute("mainMenuItem", "Dues");
+        m.addAttribute("content", "user/dues :: content");
+        return "user/user-layout";
+    }
 
     }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<div th:fragment="content" class="container mt-2">
+	<script src="/widgets/simple-table/js/simple-table.js"></script>
+	<script src="/common/js/alert.js"></script>
+	<script src="/common/js/utils/util.js"></script>
+	<script src="/common/js/librarian/dues.js"></script>
+
+
+	<div class="row justify-content-center">
+		<div class="col-md-10 col-lg-7">
+			<div id="alert-placeholder"></div>
+			<div class="simple-table-class-container" id="table-container1"></div>
+			<button class="btn btn-primary" onclick="generatePdf()" type="button">Generate Pdf</button>
+		</div>
+
+	</div>
+	
+</div>
+
+</html>
