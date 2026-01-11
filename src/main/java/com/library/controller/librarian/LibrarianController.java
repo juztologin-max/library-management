@@ -50,5 +50,17 @@ public class LibrarianController {
 		m.addAttribute("content", "admin/manage-book :: content");
 		return "librarian/librarian-layout";
 	}
+	
+	@GetMapping("/dues")
+	@Valid
+	public String getDues(Model m, @AuthenticationPrincipal UserDetails usr) {
+		UserDTO userDTO = new UserDTO();
+		userDTO.setName(usr.getUsername());
+		m.addAttribute("usr", userDTO);
+		m.addAttribute("title", "Dues");
+		m.addAttribute("mainMenuItem", "Dues");
+		m.addAttribute("content", "librarian/dues :: content");
+		return "librarian/librarian-layout";
+	}
 
 }
