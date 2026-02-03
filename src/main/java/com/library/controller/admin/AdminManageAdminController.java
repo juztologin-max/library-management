@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
 
 @RequestMapping("/admin/api/manage-admin")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 public class AdminManageAdminController {
 	@Autowired

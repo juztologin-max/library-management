@@ -1,5 +1,6 @@
 package com.library.controller.librarian;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/librarian")
+@PreAuthorize("hasAuthority('LIBRARIAN')")
 public class LibrarianController {
 
 	@GetMapping("/dashboard")
@@ -50,7 +52,7 @@ public class LibrarianController {
 		m.addAttribute("content", "admin/manage-book :: content");
 		return "librarian/librarian-layout";
 	}
-	
+
 	@GetMapping("/dues")
 	@Valid
 	public String getDues(Model m, @AuthenticationPrincipal UserDetails usr) {

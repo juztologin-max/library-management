@@ -12,12 +12,16 @@ import jakarta.persistence.Table;
 public class LoginRoles {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="login_role_id")
+	@Column(name = "login_role_id")
 	private long id;
 	@Column(nullable = false, unique = true, length = 30)
 	private String roleName;
 
 	public LoginRoles() {
+	}
+
+	public LoginRoles(String roleName) {
+		this.roleName = roleName;
 	}
 
 	public long getId() {

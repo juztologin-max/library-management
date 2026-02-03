@@ -2,6 +2,7 @@ package com.library.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.library.service.user.UserDuesService;
 import tools.jackson.databind.JsonNode;
 
 @RequestMapping("/user/api/manage-dues")
+@PreAuthorize("hasAuthority('USER')")
 @RestController
 public class UserDuesController {
 	@Autowired
@@ -26,11 +28,12 @@ public class UserDuesController {
 	private AdminUserService userService;
 
 	@PostMapping("/list-dues")
-	public PagedModel<LibrarianDuesProjection> listBorrowings(@RequestBody JsonNode payload,@AuthenticationPrincipal UserDetails usr) {
-		
-		return new PagedModel<>(UserDuesService.listAll(payload,userService.findByLoginUser(((LoginUserDetails)usr).getUser()).get().getId()));
+	public PagedModel<LibrarianDuesProjection> listBorrowings(@RequestBody JsonNode payload,
+			@AuthenticationPrincipal UserDetails usr) {
+
+		return new PagedModel<>(UserDuesService.listAll(payload,
+				userService.findByLoginUser(((LoginUserDetails) usr).getUser()).get().getId()));
 
 	}
-	
 
-	}
+}

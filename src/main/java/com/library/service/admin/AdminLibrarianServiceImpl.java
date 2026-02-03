@@ -25,8 +25,7 @@ public class AdminLibrarianServiceImpl implements AdminLibrarianService {
 	private AdminLibrarianRepository repo;
 	@Autowired
 	private ConversionService conversionService;
-	
-	
+
 	public Librarian saveLibrarian(Librarian libr) {
 		return repo.save(libr);
 	}
@@ -35,9 +34,6 @@ public class AdminLibrarianServiceImpl implements AdminLibrarianService {
 		repo.delete(libr);
 	}
 
-
-	
-
 	public Page<Librarian> listAll(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
@@ -45,12 +41,13 @@ public class AdminLibrarianServiceImpl implements AdminLibrarianService {
 		JsonNode sortableNode = jsonNode.path("pageable").get("sortable");
 		for (Entry<String, JsonNode> entry : sortableNode.properties()) {
 			String column = entry.getKey();
-			
-			Sort.Direction direction=entry.getValue().asString().equalsIgnoreCase("ASC")?Sort.Direction.ASC:Sort.Direction.DESC;
+
+			Sort.Direction direction = entry.getValue().asString().equalsIgnoreCase("ASC") ? Sort.Direction.ASC
+					: Sort.Direction.DESC;
 			orders.add(new Sort.Order(direction, column));
-			
+
 		}
-		
+
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 		return repo.findAll(pageable);
 	}
@@ -62,22 +59,22 @@ public class AdminLibrarianServiceImpl implements AdminLibrarianService {
 		JsonNode sortableNode = jsonNode.path("pageable").get("sortable");
 		for (Entry<String, JsonNode> entry : sortableNode.properties()) {
 			String column = entry.getKey();
-			Sort.Direction direction=entry.getValue().asString().equalsIgnoreCase("ASC")?Sort.Direction.ASC:Sort.Direction.DESC;
-		
-			
+			Sort.Direction direction = entry.getValue().asString().equalsIgnoreCase("ASC") ? Sort.Direction.ASC
+					: Sort.Direction.DESC;
+
 			orders.add(new Sort.Order(direction, column));
-			
+
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 
-		SearchSpecification<Librarian> spec=new SearchSpecification(jsonNode.get("searchable"),
+		SearchSpecification<Librarian> spec = new SearchSpecification(jsonNode.get("searchable"),
 				conversionService);
 		return repo.findAll(spec, pageable);
-		
+
 	}
-	
+
 	public Optional<Librarian> findById(Long id) {
 		return repo.findById(id);
 	}
-	
+
 }

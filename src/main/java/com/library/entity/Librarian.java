@@ -16,6 +16,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * DTO class to shuttle user info between login page and
@@ -34,9 +36,11 @@ public final class Librarian {
 	@Column(nullable = false, length = 30)
 	private String legalName;
 
+	@Email(message = "Not a valid email address")
 	@Column(nullable = false, length = 100)
 	private String email;
 
+	@Pattern(regexp = "^(?:\\\\+91)?[6-9][0-9]{9}$", message = "Not a valid phone number")
 	@Column(nullable = false, length = 20)
 	private String phoneNo;
 
@@ -58,7 +62,7 @@ public final class Librarian {
 	private LoginUser updatedBy;
 
 	// one to one
-	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "login_user_id") // foreign key
 	private LoginUser loginUser;
 
@@ -70,7 +74,7 @@ public final class Librarian {
 	@PreUpdate
 	protected void onUpdate() {
 		this.updatedAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-		
+
 	}
 
 	public Librarian() {

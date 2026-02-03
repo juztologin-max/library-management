@@ -1,5 +1,6 @@
 package com.library.controller.admin;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -13,13 +14,14 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
 
     @GetMapping("/dashboard")
-    @Valid
     public String getAdminDashboard(Model m, @AuthenticationPrincipal UserDetails usr) {
         UserDTO userDTO = new UserDTO();
         userDTO.setName(usr.getUsername());
+        userDTO.setRole(usr.getAuthorities().stream().findFirst().map(Object::toString).orElse(""));
         m.addAttribute("usr", userDTO);
         m.addAttribute("title", "Dashboard");
         m.addAttribute("mainMenuItem", "Dashboard");
@@ -28,7 +30,6 @@ public class AdminController {
     }
 
     @GetMapping("/manage-admin")
-    @Valid
     public String getManageAdmin(Model m, @AuthenticationPrincipal UserDetails usr) {
         UserDTO userDTO = new UserDTO();
         userDTO.setName(usr.getUsername());
@@ -51,7 +52,7 @@ public class AdminController {
         m.addAttribute("content", "admin/manage-librarian :: content");
         return "admin/admin-layout";
     }
-    
+
     @GetMapping("/manage-user")
     @Valid
     public String getManageUsers(Model m, @AuthenticationPrincipal UserDetails usr) {
@@ -63,7 +64,7 @@ public class AdminController {
         m.addAttribute("content", "admin/manage-user :: content");
         return "admin/admin-layout";
     }
-    
+
     @GetMapping("/manage-book")
     @Valid
     public String getManageBook(Model m, @AuthenticationPrincipal UserDetails usr) {

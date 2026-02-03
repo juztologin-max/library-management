@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.library.dto.UserDTO;
 import com.library.entity.Librarian;
 import com.library.entity.LoginUser;
 import com.library.entity.LoginUserDetails;
@@ -30,6 +30,7 @@ import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
 
 @RequestMapping("/admin/api/manage-librarian")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 public class AdminManageLibrarianController {
 	@Autowired
@@ -109,7 +110,7 @@ public class AdminManageLibrarianController {
 			librarian.setAddress(jsonNode.get("address").asString());
 			librarian.setEmail(jsonNode.get("email").asString());
 			librarian.setPhoneNo(jsonNode.get("phone").asString());
-			//librarian.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+			// librarian.setUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
 			librarian.setUpdatedBy(((LoginUserDetails) usr).getUser());
 			try {

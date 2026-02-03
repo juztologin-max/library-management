@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import com.library.entity.LoginUser;
 import com.library.entity.LoginUserDetails;
@@ -30,6 +30,7 @@ import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
 
 @RequestMapping("/admin/api/manage-user")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 public class AdminManageUserController {
 	@Autowired

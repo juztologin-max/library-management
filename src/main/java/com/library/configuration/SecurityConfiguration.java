@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfiguration {
 
 	@Value("${remember_me.key}")
@@ -26,7 +28,9 @@ public class SecurityConfiguration {
 		    				    	 auth.requestMatchers( "/login","/common/**", "/widgets/**").permitAll()
 		    				    	     .requestMatchers("/admin/**").hasAuthority("ADMIN")
 		    				    	     .requestMatchers("/user/**").hasAuthority("USER")
-		     							 .anyRequest().authenticated())
+										 .requestMatchers("/user/**").hasAuthority("LIBRARIAN")
+										 .requestMatchers("/dashboard").authenticated()
+		     							 .anyRequest().denyAll())
 			.formLogin(loginForm -> 
 						   loginForm.loginPage("/login").loginProcessingUrl("/login")
 								 	.defaultSuccessUrl("/dashboard",true)

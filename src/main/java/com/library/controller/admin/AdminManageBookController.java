@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +27,7 @@ import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
 
 @RequestMapping("/admin/api/manage-book")
+@PreAuthorize("hasAuthority('ADMIN')")
 @RestController
 public class AdminManageBookController {
 	@Autowired

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ import com.library.service.user.UserBorrowingService;
 import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
 
+@PreAuthorize("hasAuthority('USER')")
 @RequestMapping("/user/api/manage-borrowing")
 @RestController
 public class UserBorrowingController {
@@ -72,7 +74,7 @@ public class UserBorrowingController {
 		boolean status = false;
 		try {
 			userBorrowingService.borrowBook(userService.findByLoginUser(lusr.getUser()).get(), bookId);
-			status=true;
+			status = true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 
@@ -82,7 +84,7 @@ public class UserBorrowingController {
 		return ret;
 
 	}
-	
+
 	@GetMapping("/return/{id}")
 	@Valid
 	public Map<String, Boolean> returnBook(@PathVariable("id") Long bookId, @AuthenticationPrincipal UserDetails usr) {
@@ -91,7 +93,7 @@ public class UserBorrowingController {
 		boolean status = false;
 		try {
 			userBorrowingService.returnBook(userService.findByLoginUser(lusr.getUser()).get(), bookId);
-			status=true;
+			status = true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 

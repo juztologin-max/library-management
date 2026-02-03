@@ -1,5 +1,6 @@
 package com.library.controller.user;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/user")
+@PreAuthorize("hasAuthority('USER')")
 public class UserController {
 
     @GetMapping("/dashboard")
@@ -26,7 +28,7 @@ public class UserController {
         m.addAttribute("content", "user/dashboard :: content");
         return "user/user-layout";
     }
-    
+
     @GetMapping("/manage-borrowing")
     @Valid
     public String getUserBorrowing(Model m, @AuthenticationPrincipal UserDetails usr) {
@@ -38,6 +40,7 @@ public class UserController {
         m.addAttribute("content", "user/manage-borrowing :: content");
         return "user/user-layout";
     }
+
     @GetMapping("/dues")
     @Valid
     public String getUserDues(Model m, @AuthenticationPrincipal UserDetails usr) {
@@ -50,4 +53,4 @@ public class UserController {
         return "user/user-layout";
     }
 
-    }
+}

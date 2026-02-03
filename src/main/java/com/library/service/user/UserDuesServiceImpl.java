@@ -10,11 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.library.entity.LoginUserDetails;
 import com.library.projections.librarian.LibrarianDuesProjection;
 import com.library.repository.user.UserDuesRepository;
 import com.library.service.admin.AdminUserService;
@@ -33,7 +30,7 @@ public class UserDuesServiceImpl implements UserDuesService {
 	@Autowired
 	private AdminUserService userService;
 
-	public Page<LibrarianDuesProjection> listAll(JsonNode jsonNode,Long usrId) {
+	public Page<LibrarianDuesProjection> listAll(JsonNode jsonNode, Long usrId) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
 		int limit = jsonNode.get("pageable").get("pageSize").asInt();
@@ -49,8 +46,7 @@ public class UserDuesServiceImpl implements UserDuesService {
 
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 		System.out.println(duesSetting.borrowDuration());
-		return repo.getDues(pageable, duesSetting.borrowDuration(),usrId);
+		return repo.getDues(pageable, duesSetting.borrowDuration(), usrId);
 	}
-
 
 }

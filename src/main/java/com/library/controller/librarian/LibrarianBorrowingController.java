@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +20,10 @@ import tools.jackson.databind.JsonNode;
 
 @RequestMapping("/librarian/api/manage-borrowing")
 @RestController
+@PreAuthorize("hasAuthority('LIBRARIAN')")
 public class LibrarianBorrowingController {
 	@Autowired
 	private LibrarianBorrowingService librarianBorrowingService;
-
-	
 
 	@PostMapping("/list-borrowings")
 	public PagedModel<LibrarianBorrowingProjection> listBorrowings(@RequestBody JsonNode payload) {
@@ -37,12 +37,12 @@ public class LibrarianBorrowingController {
 	}
 
 	@GetMapping("/accept/{id}")
-	public Map<String, Boolean>  acceptBorrowingOrReturning(@PathVariable("id") Long borrowingId) {
+	public Map<String, Boolean> acceptBorrowingOrReturning(@PathVariable("id") Long borrowingId) {
 		Map<String, Boolean> ret = new HashMap<>();
-		boolean status=false;
+		boolean status = false;
 		try {
 			librarianBorrowingService.acceptBorrowingOrReturning(borrowingId);
-			status=true;
+			status = true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 
@@ -51,14 +51,14 @@ public class LibrarianBorrowingController {
 		ret.put("successfull", status);
 		return ret;
 	}
-	
+
 	@GetMapping("/delete/{id}")
-	public Map<String, Boolean>  deleteBorrowing(@PathVariable("id") Long borrowingId) {
+	public Map<String, Boolean> deleteBorrowing(@PathVariable("id") Long borrowingId) {
 		Map<String, Boolean> ret = new HashMap<>();
-		boolean status=false;
+		boolean status = false;
 		try {
 			librarianBorrowingService.deleteBorrowing(borrowingId);
-			status=true;
+			status = true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 

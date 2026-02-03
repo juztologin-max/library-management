@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,11 +20,15 @@ import tools.jackson.databind.JsonNode;
 
 @Service
 public class AdminBookServiceImpl implements AdminBookService {
-	@Autowired
-	private AdminBookRepository repo;
-	@Autowired
-	private ConversionService conversionService;
-	
+	private final AdminBookRepository repo;
+	private final ConversionService conversionService;
+
+	// @Autowired
+	public AdminBookServiceImpl(AdminBookRepository repo, ConversionService conversionService) {
+		this.repo = repo;
+		this.conversionService = conversionService;
+	}
+
 	public Book saveBook(Book book) {
 		return repo.save(book);
 	}
@@ -34,9 +37,6 @@ public class AdminBookServiceImpl implements AdminBookService {
 		repo.delete(book);
 	}
 
-
-	
-
 	public Page<Book> listAll(JsonNode jsonNode) {
 		List<Sort.Order> orders = new ArrayList<>();
 		int pageNo = jsonNode.get("pageable").get("pageNo").asInt();
@@ -44,12 +44,13 @@ public class AdminBookServiceImpl implements AdminBookService {
 		JsonNode sortableNode = jsonNode.path("pageable").get("sortable");
 		for (Entry<String, JsonNode> entry : sortableNode.properties()) {
 			String column = entry.getKey();
-			
-			Sort.Direction direction=entry.getValue().asString().equalsIgnoreCase("ASC")?Sort.Direction.ASC:Sort.Direction.DESC;
+
+			Sort.Direction direction = entry.getValue().asString().equalsIgnoreCase("ASC") ? Sort.Direction.ASC
+					: Sort.Direction.DESC;
 			orders.add(new Sort.Order(direction, column));
-			
+
 		}
-		
+
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 		return repo.findAll(pageable);
 	}
@@ -61,21 +62,21 @@ public class AdminBookServiceImpl implements AdminBookService {
 		JsonNode sortableNode = jsonNode.path("pageable").get("sortable");
 		for (Entry<String, JsonNode> entry : sortableNode.properties()) {
 			String column = entry.getKey();
-			Sort.Direction direction=entry.getValue().asString().equalsIgnoreCase("ASC")?Sort.Direction.ASC:Sort.Direction.DESC;
-		
-			
+			Sort.Direction direction = entry.getValue().asString().equalsIgnoreCase("ASC") ? Sort.Direction.ASC
+					: Sort.Direction.DESC;
+
 			orders.add(new Sort.Order(direction, column));
-			
+
 		}
 		Pageable pageable = PageRequest.of(pageNo, limit, Sort.by(orders));
 
-		SearchSpecification<Book> spec=new SearchSpecification<>(jsonNode.get("searchable"),conversionService);
+		SearchSpecification<Book> spec = new SearchSpecification<>(jsonNode.get("searchable"), conversionService);
 		return repo.findAll(spec, pageable);
-		
+
 	}
-	
+
 	public Optional<Book> findById(Long id) {
 		return repo.findById(id);
 	}
-	
+
 }

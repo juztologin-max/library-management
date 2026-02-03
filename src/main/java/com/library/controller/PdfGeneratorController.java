@@ -1,14 +1,12 @@
 package com.library.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +16,7 @@ import com.library.service.PdfCreaterService;
 
 import tools.jackson.databind.JsonNode;
 
+@PreAuthorize("hasAuthority('ADMIN')||hasAuthority('LIBRARIAN')||hasAuthority('USER')")
 @RequestMapping("/api/pdf")
 @RestController
 public class PdfGeneratorController {
@@ -26,8 +25,7 @@ public class PdfGeneratorController {
 
 	@PostMapping("/create")
 	public ResponseEntity<byte[]> createPdf(@RequestBody JsonNode payload) {
-		
-		
+
 		byte[] pdfBytes = pdfCreaterService.createPdf(payload);
 
 		HttpHeaders headers = new HttpHeaders();

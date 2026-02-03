@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<div th:fragment="content" class="container">
-	<h1>Welcome to the Site!</h1>
-</div>
+	<div th:fragment="content" class="container">
+		<h6 th:text="|Welcome, ${usr.name} [${usr.role}]|" class="text-center"></h6>
+
+	</div>
+
 </html>
