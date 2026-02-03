@@ -62,7 +62,7 @@ async function generatePdf() {
 		"Content-Type": "application/json"
 	};
 
-	try {
+	/*try {
 
 
 
@@ -94,18 +94,13 @@ async function generatePdf() {
 
 	} catch (e) {
 		console.log(e);
-	}
+	}*/
 
 
 
-	const resp2 = await fetch(getBaseUrl() + "/api/pdf/create", {
-		method: "POST",
-		headers: customHeaders,
-		body: JSON.stringify({
-			title: "Dues",
-			headers: Object.fromEntries(hKMap),
-			rows: source
-		})
+	const resp2 = await fetch("api/manage-dues/pdf/create", {
+		method: "GET",
+		headers: customHeaders
 	}).then(response => response.blob())
 		.then(blob => {
 			console.log(blob);
