@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,7 @@ import com.library.service.PdfCreaterService;
 
 import tools.jackson.databind.JsonNode;
 
-@PreAuthorize("hasAuthority('ADMIN')||hasAuthority('LIBRARIAN')||hasAuthority('USER')")
+//@PreAuthorize("hasAuthority('ADMIN')||hasAuthority('LIBRARIAN')||hasAuthority('USER')")
 @RequestMapping("/api/pdf")
 @RestController
 public class PdfGeneratorController {

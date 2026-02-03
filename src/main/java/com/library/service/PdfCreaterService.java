@@ -35,7 +35,7 @@ import tools.jackson.databind.JsonNode;
 */
 
 @Service
-@Lazy
+//@Lazy
 public class PdfCreaterService {
 
 	public byte[] createPdf(JsonNode payload) {

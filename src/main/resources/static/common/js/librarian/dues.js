@@ -98,7 +98,7 @@ async function generatePdf() {
 
 
 
-	const resp = await fetch(getBaseUrl() + "/api/pdf/create", {
+	const resp2 = await fetch(getBaseUrl() + "/api/pdf/create", {
 		method: "POST",
 		headers: customHeaders,
 		body: JSON.stringify({
@@ -106,17 +106,18 @@ async function generatePdf() {
 			headers: Object.fromEntries(hKMap),
 			rows: source
 		})
-	}).then(response=>response.blob())
-	.then(blob=>{
-		const url=window.URL.createObjectURL(blob);
-		const a =document.createElement('a');
-		a.href=url;
-		a.download="dues.pdf";
-		a.click();
-		window.URL.revokeObjectURL(url);
-		a.remove();
-	}).catch(e=>console.error(e));
-	
+	}).then(response => response.blob())
+		.then(blob => {
+			console.log(blob);
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = "dues.pdf";
+			a.click();
+			window.URL.revokeObjectURL(url);
+			a.remove();
+		}).catch(e => console.error(e));
+
 }
 
 

@@ -28,8 +28,9 @@ public class SecurityConfiguration {
 		    				    	 auth.requestMatchers( "/login","/common/**", "/widgets/**").permitAll()
 		    				    	     .requestMatchers("/admin/**").hasAuthority("ADMIN")
 		    				    	     .requestMatchers("/user/**").hasAuthority("USER")
-										 .requestMatchers("/user/**").hasAuthority("LIBRARIAN")
+										 .requestMatchers("/librarian/**").hasAuthority("LIBRARIAN")
 										 .requestMatchers("/dashboard").authenticated()
+										 .requestMatchers("/api/pdf/**").authenticated()
 		     							 .anyRequest().denyAll())
 			.formLogin(loginForm -> 
 						   loginForm.loginPage("/login").loginProcessingUrl("/login")
