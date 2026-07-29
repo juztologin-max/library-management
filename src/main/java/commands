@@ -1,0 +1,4 @@
+#mysqldump -u your_username -p --no-create-info --complete-insert your_database_name > data.sql
+#mvn spring-boot:run -Dspring-boot.run.profiles=prod
+#mysqldump -u  -p --skip-add-locks --no-create-info --compact  > data.sql
+#git push origin main
