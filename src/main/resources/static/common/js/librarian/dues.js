@@ -48,53 +48,10 @@ function manageBookInit() {
 
 
 async function generatePdf() {
-	const hKMap = new Map([
-		['BOOK', 'book'],
-		['BORROWER', 'borrower'],
-		['BORROW DATE', 'borrowDate'],
-		['DUE', 'due']
-
-
-	]);
-	var source;
 	customHeaders = {
 		[document.querySelector('meta[name="crsf_header"]').getAttribute("content")]: document.querySelector('meta[name="crsf_value"]').getAttribute("content"),
 		"Content-Type": "application/json"
 	};
-
-	/*try {
-
-
-
-		sortables = new Map();
-		sortables.set("borrowDate", "ASC");
-
-		body = {
-			"pageable": {
-				"pageNo": 0,
-				"pageSize": 10000,
-				"sortable": Object.fromEntries(sortables)
-			},
-
-		};
-
-		const resp = await fetch("api/manage-dues/list-dues", {
-			method: "POST",
-			headers: customHeaders,
-			body: JSON.stringify(body)
-		});
-
-		if (!resp.ok) {
-			throw new Error("Fetch error");
-		}
-		var jsonResp = await resp.json();
-		totalPages = jsonResp.page.totalPages;
-		source = jsonResp.content;
-
-
-	} catch (e) {
-		console.log(e);
-	}*/
 
 
 

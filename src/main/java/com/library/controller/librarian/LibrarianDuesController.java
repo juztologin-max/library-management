@@ -1,7 +1,6 @@
 package com.library.controller.librarian;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,8 @@ import com.library.service.librarian.LibrarianDuesService;
 
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @RequestMapping("/librarian/api/manage-dues")
 @RestController
@@ -88,7 +87,7 @@ public class LibrarianDuesController {
 
 		headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
-		headers.setContentDisposition(ContentDisposition.attachment().filename("dues.pdf").build());
+		headers.setContentDisposition(ContentDisposition.attachment().filename("DuesAllUsers.pdf").build());
 
 		return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
 	}
