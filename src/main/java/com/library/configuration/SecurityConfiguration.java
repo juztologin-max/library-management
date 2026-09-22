@@ -15,17 +15,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-	@Value("${remember_me.key}")
-	private String remKey;
-	@Value("${remember_me.valididty}")
-	private int validity;
+    @Value("${remember_me.key}")
+    private String remKey;
+    @Value("${remember_me.valididty}")
+    private int validity;
 
-	@Value("${app.security.enforce-https:false}")
-	private boolean enforceHttps;
+    @Value("${app.security.enforce-https:false}")
+    private boolean enforceHttps;
 
-	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) {
-		//@formatter:off
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        //@formatter:off
 		if(enforceHttps) {
 		http.redirectToHttps(Customizer.withDefaults());
 		 }
@@ -53,7 +53,7 @@ loginForm.loginPage("/login").loginProcessingUrl("/login")
 //.csrf(csrf -> csrf.disable());
 
 		//@formatter:on
-		return http.build();
+        return http.build();
 
-	}
+    }
 }

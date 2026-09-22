@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile({"!dev-no-https","!no-https"}) 
 public class HttpRedirectConfiguration {
-	@Value("${insecure_redirection.http.port}")
+	@Value("${insecure_redirection.http.port:8080}")
 	private int httpPort;
 
 	@Value("${server.port}")
